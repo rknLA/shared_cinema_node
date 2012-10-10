@@ -9,7 +9,7 @@ describe 'video submission', ->
         data:
           user_id: '1234'
           youtube_video_id: 'mxPXPv3oNY4'
-      }).on 'complete', (data, repsonse) ->
+      }).on 'complete', (data, response) ->
         sys.puts data
         response.should.not.equal undefined
         response.statusCode.should.equal 201

@@ -12,6 +12,8 @@ task 'test', 'run tests', ->
     --require coffee-script
     --require test/test_helper.coffee
     --colors
+    test/apps/*.coffee
+    test/models/*.coffee
   ", (err, output) ->
     console.log output
     throw err if err
