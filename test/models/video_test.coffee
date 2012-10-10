@@ -33,6 +33,7 @@ describe 'Video', ->
     it 'generates an id', ->
       video.id.should.not.equal null
 
+
   describe 'vote', ->
     my_user_id = 3
 
@@ -44,4 +45,21 @@ describe 'Video', ->
 
     it 'should know i voted', ->
       video.votes.indexOf(my_user_id).should.not.equal -1
+
+    describe 'voting twice', ->
+      before -> video.vote my_user_id
+
+      it 'should decrement the vote count', ->
+        video.vote_count.should.equal 1
+
+      it 'should remove me from the voted list', ->
+        video.votes.indexOf(my_user_id).should.equal -1
+      
+      describe 'triple voting', ->
+        before -> video.vote my_user_id
+
+        it 'should count my vote again', ->
+          video.vote_count.should.equal 2
+          video.votes.indexOf(my_user_id).should.not.equal -1
+
 
