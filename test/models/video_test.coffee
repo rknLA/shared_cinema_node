@@ -24,7 +24,7 @@ describe 'Video', ->
             done()
 
 
-  describe 'create', ->
+  describe 'submitting', ->
     it 'sets the user', ->
       video.user_id.should.equal user._id
 

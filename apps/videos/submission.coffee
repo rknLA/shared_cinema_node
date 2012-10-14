@@ -1,4 +1,4 @@
-sys = require 'util'
+User = require '../../models/user'
 Video = require '../../models/video'
 
 routes = (app) ->
@@ -7,11 +7,17 @@ routes = (app) ->
     if accepted == 'application/json'
       #make object
       youtubeId = req.body.youtube_video_id
-      video = new Video
-        user_id: req.body.user_id
-        youtube_video_id: req.body.youtube_video_id
-      res.status(201)
-      res.json(video)
+      User.authenticate req.body.user_id, (currentUser) ->
+        if currentUser
+          Video.submit
+            user_id: currentUser._id
+            youtube_video_id: youtubeId
+            (v) ->
+              res.status(201)
+              res.json(v)
+        else
+          res.status(401)
+          res.send()
     else
       res.status(406) #not acceptable
       res.send()
