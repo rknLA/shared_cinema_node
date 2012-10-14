@@ -12,6 +12,10 @@ UserSchema.static 'register', (attrs, callback) ->
     else
       callback doc
 
+UserSchema.static 'authenticate', (uid, callback) ->
+  this.findById uid, (err, user) ->
+    callback user
+
 User = mongoose.model('User', UserSchema)
 
 module.exports = mongoose.model('User')
