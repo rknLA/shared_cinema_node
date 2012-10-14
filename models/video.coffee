@@ -1,27 +1,51 @@
-class Video
-  constructor: (attributes) ->
-    @user_id = attributes.user_id
-    @youtube_video_id = attributes.youtube_video_id
-    @setDefaults()
+mongoose = require 'mongoose'
 
-  setDefaults: ->
-    @posted_at = new Date
-    @vote_count = 1
-    @votes = [@user_id]
-    @id = 1
+VideoSchema = new mongoose.Schema
+  user_id:
+    type: mongoose.Schema.Types.ObjectId
+    required: true
+  youtube_video_id:
+    type: String
+    required: true
+    index: true
+  vote_count:
+    type: Number
+    default: 1
+  votes: [mongoose.Schema.Types.ObjectId]
+  submitted_at:
+    type: Date
+    default: Date.now
+  started_at: Date
+  finished_at: Date
+  playing:
+    type: Boolean
+    default: false
 
-  vote: (user_id) ->
-    # add a vote for users that exist, remove a vote for those that don't
-    # basically, behave like a toggle
-    vote_index = @votes.indexOf user_id
-    if vote_index is -1
-      @votes.push user_id
-      @vote_count += 1
+VideoSchema.static 'submit', (attrs, callback) ->
+  video = new this()
+  video.youtube_video_id = attrs.youtube_video_id
+  video.user_id = attrs.user_id
+  video.votes = [attrs.user_id]
+  video.vote_count = 1
+  video.started_at = null
+  video.finished_at = null
+  video.save (e, doc) ->
+    if e
+      throw e
     else
-      @votes.splice vote_index, 1
-      @vote_count -= 1
+      callback doc
+      
+VideoSchema.methods.vote = (user_id) ->
+  # add a vote for users that exist, remove a vote for those that don't
+  # basically, behave like a toggle
+  vote_index = this.votes.indexOf user_id
+  if vote_index is -1
+    this.votes.push user_id
+    this.vote_count += 1
+  else
+    this.votes.splice vote_index, 1
+    this.vote_count -= 1
 
 
-    
-
-module.exports = Video
+Video = mongoose.model('Video', VideoSchema)
+module.exports = mongoose.model('Video')
