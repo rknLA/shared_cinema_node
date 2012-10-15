@@ -1,14 +1,19 @@
-User = require '../../models/user'
-
 describe 'User', ->
 
   user = null
+
   before (done) ->
-    User.register
-      ip: '127.0.0.1'
-      (u) ->
-        user = u
-        done()
+    mongoose.connect 'mongodb://localhost/cinema_test', (err) ->
+      throw err if err
+      User.register
+        ip: '127.0.0.1'
+        (u) ->
+          user = u
+          done()
+  after (done) ->
+    User.remove (err) ->
+      throw err if err
+      mongoose.disconnect done
 
   describe 'create', ->
 

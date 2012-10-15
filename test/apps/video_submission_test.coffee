@@ -1,15 +1,22 @@
-User = require '../../models/user'
-Video = require '../../models/video'
-
 describe 'video submission', ->
   user = null
+  video = null
 
   before (done) ->
-    User.register
-      ip: '127.0.0.1'
-      (u) ->
-        user = u
-        done()
+    mongoose.connect 'mongodb://localhost/cinema_test', (err) ->
+      throw err if err
+      User.register
+        ip: '127.0.0.1'
+        (u) ->
+          user = u
+          done()
+
+  after (done) ->
+    Video.remove (err) ->
+      throw err if err
+      User.remove (err) ->
+        throw err if err
+        mongoose.disconnect done
 
 
   describe 'when none exist', ->
@@ -24,7 +31,6 @@ describe 'video submission', ->
       }).on 'complete', (data, response) ->
         response.should.not.equal undefined
         response.statusCode.should.equal 201
-        console.log data
         data.user_id.should.equal user.id
         data.youtube_video_id.should.equal 'mxPXPv3oNY4'
         data.vote_count.should.equal 1
@@ -32,11 +38,17 @@ describe 'video submission', ->
         done()
 
   describe 'when some are in the queue', ->
+    existingVideo = null
 
-    before ->
-      video = new Video
-        user_id: user.id
+    before (done) ->
+      Video.submit
+        user_id: user._id
         youtube_video_id: 'Y8-CZaHFTdQ'
+        (v) ->
+          existingVideo = v
+          done()
+    after (done) ->
+      existingVideo.remove done
 
     describe 'a new video', ->
 
@@ -47,11 +59,11 @@ describe 'video submission', ->
             'Accept': 'application/json'
           data:
             user_id: user.id
-            youtube_video_id: 'mxPXPv3oNY4'
+            youtube_video_id: 'Zg6iMDfOl9E'
         }).on 'complete', (data, response) ->
           response.statusCode.should.equal 201
           data.user_id.should.equal user.id
-          data.youtube_video_id.should.equal 'mxPXPv3oNY4'
+          data.youtube_video_id.should.equal 'Zg6iMDfOl9E'
           data.vote_count.should.equal 1
           data.votes.indexOf(user.id).should.not.equal -1
           done()

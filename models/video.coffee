@@ -20,20 +20,34 @@ VideoSchema = new mongoose.Schema
   playing:
     type: Boolean
     default: false
+  played:
+    type: Boolean
+    default: false
 
 VideoSchema.static 'submit', (attrs, callback) ->
-  video = new this()
-  video.youtube_video_id = attrs.youtube_video_id
-  video.user_id = attrs.user_id
-  video.votes = [attrs.user_id]
-  video.vote_count = 1
-  video.started_at = null
-  video.finished_at = null
-  video.save (e, doc) ->
-    if e
-      throw e
-    else
-      callback doc
+  ytID = attrs.youtube_video_id
+  that = this
+  this.findOne
+    youtube_video_id: ytID
+    played: false
+    (err, vid) ->
+      if vid
+        console.log "video already exists!"
+        callback()
+      else
+        console.log "video doesn't exist!"
+        video = new that()
+        video.youtube_video_id = attrs.youtube_video_id
+        video.user_id = attrs.user_id
+        video.votes = [attrs.user_id]
+        video.vote_count = 1
+        video.started_at = null
+        video.finished_at = null
+        video.save (e, doc) ->
+          if e
+            throw e
+          else
+            callback doc
       
 VideoSchema.methods.vote = (user_id) ->
   # add a vote for users that exist, remove a vote for those that don't
