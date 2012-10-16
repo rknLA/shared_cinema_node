@@ -1,4 +1,28 @@
+User = require '../../models/user'
+Video = require '../../models/video'
+
 routes = (app) ->
-  app.post 'upvote', (req, res) ->
+  app.post '/vote', (req, res) ->
+    accepted = req.get('Accept')
+    if accepted == 'application/json'
+      youtubeId = req.body.youtube_video_id
+      User.authenticate req.body.user_id, (currentUser) ->
+        if currentUser
+          Video.findOne
+            youtube_video_id: youtubeId
+            played: false
+            (err, vid) ->
+              throw err if err
+              vid.vote currentUser._id
+              vid.save (err) ->
+                throw err if err
+                res.status 200
+                res.send()
+        else
+          res.status 401 # unauthorized
+          res.send()
+    else
+      res.status 406 # not acceptable
+      res.send()
 
 module.exports = routes

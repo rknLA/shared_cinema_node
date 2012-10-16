@@ -21,16 +21,16 @@ routes = (app) ->
                   youtube_video_id: youtubeId
                   (err, vid) ->
                     if err
-                      res.status(422)
+                      res.status(422) # unprocessable entity
                       res.send(err)
                     else
-                      res.status(406)
+                      res.status(406) # conflict
                       res.json(vid)
         else
-          res.status(401)
+          res.status(401) # unauthorized
           res.send()
     else
-      res.status(406) #not acceptable
+      res.status(406) # not acceptable
       res.send()
 
 module.exports = routes
