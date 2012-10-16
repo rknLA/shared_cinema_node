@@ -1,22 +1,18 @@
-describe 'video submission', ->
+describe 'Videos Endpoint (submission)', ->
   user = null
   video = null
 
   before (done) ->
-    mongoose.connect 'mongodb://localhost/cinema_test', (err) ->
-      throw err if err
-      User.register
-        ip: '127.0.0.1'
-        (u) ->
-          user = u
-          done()
+    User.register
+      ip: '127.0.0.1'
+      (u) ->
+        user = u
+        done()
 
   after (done) ->
     Video.remove (err) ->
       throw err if err
-      User.remove (err) ->
-        throw err if err
-        mongoose.disconnect done
+      User.remove done
 
 
   describe 'when none exist', ->

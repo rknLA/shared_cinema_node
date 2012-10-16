@@ -5,7 +5,8 @@
 
 var express = require('express')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , mongoose = require('mongoose');
 
 require('coffee-script');
 
@@ -28,10 +29,16 @@ app.configure(function(){
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+  app.set('db', mongoose.connect('mongodb://localhost/cinema_dev'));
+});
+
+app.configure('test', function() {
+  app.set('db', mongoose.connect('mongodb://localhost/cinema_test'));
 });
 
 require('./apps/videos/submission')(app)
 require('./apps/videos/upvote')(app)
+require('./apps/users/create')(app)
 
 
 http.createServer(app).listen(app.get('port'), function(){

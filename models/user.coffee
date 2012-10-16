@@ -6,8 +6,10 @@ UserSchema = new mongoose.Schema
 UserSchema.static 'register', (attrs, callback) ->
   user = new this()
   user.ip = attrs.ip
+  console.log "registering user: #{user}"
   user.save (e, doc) ->
     if e
+      console.log "a new error has emerged: #{e}"
       throw e
     else
       callback doc

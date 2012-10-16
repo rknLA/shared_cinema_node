@@ -3,17 +3,15 @@ describe 'User', ->
   user = null
 
   before (done) ->
-    mongoose.connect 'mongodb://localhost/cinema_test', (err) ->
-      throw err if err
-      User.register
-        ip: '127.0.0.1'
-        (u) ->
-          user = u
-          done()
+    User.register
+      ip: '127.0.0.1'
+      (u) ->
+        user = u
+        done()
+
   after (done) ->
-    User.remove (err) ->
-      throw err if err
-      mongoose.disconnect done
+    User.remove done
+
 
   describe 'create', ->
 

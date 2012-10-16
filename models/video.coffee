@@ -32,10 +32,8 @@ VideoSchema.static 'submit', (attrs, callback) ->
     played: false
     (err, vid) ->
       if vid
-        console.log "video already exists!"
         callback()
       else
-        console.log "video doesn't exist!"
         video = new that()
         video.youtube_video_id = attrs.youtube_video_id
         video.user_id = attrs.user_id

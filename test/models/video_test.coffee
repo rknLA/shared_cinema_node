@@ -4,25 +4,21 @@ describe 'Video', ->
   user = null
 
   before (done) ->
-    mongoose.connect 'mongodb://localhost/cinema_test', (err) ->
-      throw err if err
-      User.register
-        ip: '127.0.0.1'
-        (u) ->
-          user = u
-          Video.submit
-            user_id: user._id
-            youtube_video_id: 'mxPXPv3oNY4'
-            (v) ->
-              video = v
-              done()
+    User.register
+      ip: '127.0.0.1'
+      (u) ->
+        user = u
+        Video.submit
+          user_id: user._id
+          youtube_video_id: 'mxPXPv3oNY4'
+          (v) ->
+            video = v
+            done()
 
   after (done) ->
     Video.remove (err) ->
       throw err if err
-      User.remove (err) ->
-        throw err if err
-        mongoose.disconnect done
+      User.remove done
 
 
   describe 'submitting', ->
@@ -78,12 +74,9 @@ describe 'Video', ->
         (u) ->
           newUser= u
           video.vote newUser._id
-          video.save (err) ->
-            throw err if err
-            done()
+          video.save done
     after (done) ->
-      newUser.remove (err) ->
-        done()
+      newUser.remove done
 
 
     it 'should increment the vote count', ->
@@ -96,9 +89,7 @@ describe 'Video', ->
 
       before (done) ->
         video.vote newUser._id
-        video.save (err) ->
-          throw err if err
-          done()
+        video.save done
 
       it 'should decrement the vote count', ->
         video.vote_count.should.equal 1
@@ -110,9 +101,7 @@ describe 'Video', ->
 
         before (done) ->
           video.vote newUser._id
-          video.save (err) ->
-            throw err if err
-            done()
+          video.save done
 
         it 'should count my vote again', ->
           video.vote_count.should.equal 2
