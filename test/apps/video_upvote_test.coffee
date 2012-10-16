@@ -21,17 +21,42 @@ describe 'Vote Endpoint', ->
 
   describe "voting on someone elses's video", ->
 
-    it 'should register the vote', (done) ->
+    it 'should accept the vote', (done) ->
       rest.post("http://localhost:#{app.settings.port}/vote",
         headers:
           'Accept': 'application/json'
         data:
-          user_id: user1.id
+          user_id: user2.id
           youtube_video_id: 'AyzOUbkUf3M'
       ).on 'complete', (data, response) ->
         assert.notEqual response, undefined
         response.statusCode.should.equal 200
         done()
+
+    it 'should authenticate the user', (done) ->
+      rest.post("http://localhost:#{app.settings.port}/vote",
+        headers:
+          'Accept': 'application/json'
+        data:
+          user_id: '343241FGH'
+          youtube_video_id: 'AyzOUbkUf3M'
+      ).on 'complete', (data, response) ->
+        assert.notEqual response, undefined
+        response.statusCode.should.equal 401
+        done()
+
+    it 'should require a valid video', (done) ->
+      rest.post("http://localhost:#{app.settings.port}/vote",
+        headers:
+          'Accept': 'application/json'
+        data:
+          user_id: user2.id
+          youtube_video_id: '234HQBdadfas'
+      ).on 'complete', (data, response) ->
+        assert.notEqual response, undefined
+        response.statusCode.should.equal 422
+        done()
+    
 
 
 
