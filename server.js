@@ -13,6 +13,13 @@ require('coffee-script');
 
 var app = module.exports = express();
 
+var allowCORS = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -24,6 +31,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser('your secret here'));
   app.use(express.session());
+  app.use(allowCORS);
   app.use(app.router);
   app.use(require('less-middleware')({ src: __dirname + '/public' }));
   app.use(express.static(path.join(__dirname, 'public')));
@@ -38,7 +46,6 @@ app.configure('test', function() {
   app.set('db', mongoose.connect('mongodb://localhost/cinema_test'));
 });
 
-require('./apps/cors')(app)
 require('./apps/videos/submission')(app)
 require('./apps/videos/upvote')(app)
 require('./apps/users/create')(app)
