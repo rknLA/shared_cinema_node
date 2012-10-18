@@ -2,6 +2,7 @@ mongoose = require 'mongoose'
 
 UserSchema = new mongoose.Schema
     ip: String
+    log: Array
 
 UserSchema.static 'register', (attrs, callback) ->
   user = new this()
@@ -16,7 +17,24 @@ UserSchema.static 'register', (attrs, callback) ->
 UserSchema.static 'authenticate', (request, callback) ->
   uid = request.body.user_id || request.query.user_id
   this.findById uid, (err, user) ->
-    callback user
+    console.log "user in authenticate find callback: ", user
+    unless user
+      callback user
+      return
+    console.log "post null callback"
+    simpleRequest =
+      ip: request.ip
+      url: request.originalUrl
+      method: request.method
+      headers: request.headers
+      body: request.body
+      query: request.query
+      time: Date.now()
+    user.log.push simpleRequest
+    user.save (err, doc) ->
+      throw err if err
+      callback user
+
 
 User = mongoose.model('User', UserSchema)
 
