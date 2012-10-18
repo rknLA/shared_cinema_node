@@ -17,6 +17,7 @@ routes = (app) ->
             # new search
             Search.createWithQuery
               q: req.query.q
+              googleApiKey: app.settings.googleApiKey
               user_id: currentUser._id
               (results) ->
                 res.status 201

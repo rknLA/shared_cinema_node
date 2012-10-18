@@ -44,7 +44,7 @@ SearchSchema.static 'createWithQuery', (attrs, callback) ->
   queryStr = querystring.stringify query
   rest.get("https://gdata.youtube.com/feeds/api/videos?#{queryStr}", {
     headers:
-      'X-GData-Key': "key=#{app.settings.googleApiKey}"
+      'X-GData-Key': "key=#{attrs.googleApiKey}"
   }).on 'complete', (data, response) ->
     results = consolidateYouTubeResults data
     search.videos = results
