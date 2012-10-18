@@ -38,6 +38,7 @@ app.configure('test', function() {
   app.set('db', mongoose.connect('mongodb://localhost/cinema_test'));
 });
 
+require('./apps/cors')(app)
 require('./apps/videos/submission')(app)
 require('./apps/videos/upvote')(app)
 require('./apps/users/create')(app)
