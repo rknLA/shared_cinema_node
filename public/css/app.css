@@ -73,27 +73,35 @@ button.thumb:active, button.thumb:hover, button.thumb:focus {
 	margin-top: 4px;
 }
 
-#video-list li {
+.video-items li {
 	background-color: #fff;
 	border: 0;
 	border-radius: 0;
 	margin-bottom: 5px;
 }
 
-#video-list a {
-	padding: 0;
+.video-items a.ui-link-inherit {
+	padding: 0 !important;
 }
 
-#video-list span {
+.video-items span {
 	font-weight: normal;
 }
 
-#video-list span.ui-icon-arrow-r {
+.video-items span.ui-icon-arrow-r {
 	background: none;
 }
 
-#video-list h3 {
+.video-items h3 {
+	font-size: 14px;
 	margin-bottom: 0;
+	overflow: hidden;
+}
+
+.video-list-right span {
+	display: block;
+	font-size: 12px;
+	overflow: hidden;
 }
 
 .video-list-img {
