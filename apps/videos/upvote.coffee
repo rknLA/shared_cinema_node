@@ -8,8 +8,9 @@ routes = (app) ->
       youtubeId = req.body.youtube_video_id
       User.authenticate req, (currentUser) ->
         if currentUser
+          Video.find {}, (err, vids) ->
           Video.findOne
-            youtube_video_id: youtubeId
+            'youtube.video_id': youtubeId
             played: false
             (err, vid) ->
               throw err if err

@@ -10,28 +10,41 @@ describe 'Videos Endpoint (submission)', ->
         done()
 
   after (done) ->
-    Video.remove (err) ->
-      throw err if err
-      User.remove done
-
+    User.remove done
 
   describe 'when none exist', ->
+    restData = null
+    restResponse = null
 
-    it 'should allow new submissions', (done) ->
-      rest.post("http://localhost:#{app.settings.port}/videos", {
+    before (done) ->
+      videoData = Fixtures.video.albini
+      rest.postJson("http://localhost:#{app.settings.port}/videos", {
+        user_id: user.id
+        video_metadata: videoData
+      }, {
         headers:
           'Accept': 'application/json'
-        data:
-          user_id: user.id
-          youtube_video_id: 'mxPXPv3oNY4'
       }).on 'complete', (data, response) ->
-        response.should.not.equal undefined
-        response.statusCode.should.equal 201
-        data.user_id.should.equal user.id
-        data.youtube_video_id.should.equal 'mxPXPv3oNY4'
-        data.vote_count.should.equal 1
-        data.votes.indexOf(user.id).should.not.equal -1
+        restData = data
+        restResponse = response
         done()
+
+    after (done) ->
+      Video.remove done
+
+    it 'should respond with created', ->
+      restResponse.should.not.equal undefined
+      restResponse.statusCode.should.equal 201
+
+    it 'should have the right user_id', ->
+      restData.user_id.should.equal user.id
+
+    it 'should have the right video metadata', ->
+      restData.youtube.video_id.should.equal 'Y8-CZaHFTdQ'
+
+    it 'should have the right vote count', ->
+      restData.vote_count.should.equal 1
+      restData.votes.indexOf(user.id).should.not.equal -1
 
   describe 'when some are in the queue', ->
     existingVideo = null
@@ -39,48 +52,71 @@ describe 'Videos Endpoint (submission)', ->
     before (done) ->
       Video.submit
         user_id: user._id
-        youtube_video_id: 'Y8-CZaHFTdQ'
+        video_metadata: Fixtures.video.albini
         (v) ->
           existingVideo = v
           done()
+
     after (done) ->
       existingVideo.remove done
 
     describe 'a new video', ->
+      restData = null
+      restResponse = null
 
-      it 'should get created like normal', (done) ->
-
-        rest.post("http://localhost:#{app.settings.port}/videos", {
+      before (done) ->
+        rest.postJson("http://localhost:#{app.settings.port}/videos", {
+          user_id: user.id
+          video_metadata: Fixtures.video.girlfriend
+        }, {
           headers:
             'Accept': 'application/json'
-          data:
-            user_id: user.id
-            youtube_video_id: 'Zg6iMDfOl9E'
         }).on 'complete', (data, response) ->
-          response.statusCode.should.equal 201
-          data.user_id.should.equal user.id
-          data.youtube_video_id.should.equal 'Zg6iMDfOl9E'
-          data.vote_count.should.equal 1
-          data.votes.indexOf(user.id).should.not.equal -1
+          restData = data
+          restResponse = response
           done()
+      
+      it 'should get created like normal', ->
+        restResponse.statusCode.should.equal 201
+
+      it 'should set the right user id', ->
+        restData.user_id.should.equal user.id
+      it 'should have the right video metadata', ->
+        restData.youtube.video_id.should.equal 'Zg6iMDfOl9E'
+      it 'should have the right vote count', ->
+        restData.vote_count.should.equal 1
+        restData.votes.indexOf(user.id).should.not.equal -1
 
     describe 'a duplicate video', ->
-      it 'should not get created', (done) ->
-        rest.post("http://localhost:#{app.settings.port}/videos", {
+      duplicateRestData = null
+      duplicateRestResponse = null
+
+      before (done) ->
+        rest.postJson("http://localhost:#{app.settings.port}/videos", {
+          user_id: user.id
+          video_metadata: Fixtures.video.albini
+        }, {
           headers:
             'Accept': 'application/json'
-          data:
-            user_id: user.id
-            youtube_video_id: 'Y8-CZaHFTdQ'
         }).on 'complete', (data, response) ->
-          response.should.not.equal undefined
-          response.statusCode.should.equal 406 # conflict
-          #right now test fails here
-          data.user_id.should.equal user.id
-          data.youtube_video_id.should.equal 'Y8-CZaHFTdQ'
-          data.vote_count.should.equal 1
-          data.votes.indexOf(123).should.equal -1
+          duplicateRestData = data
+          duplicateRestResponse = response
           done()
+
+      it 'should not get created', ->
+        duplicateRestResponse.should.not.equal undefined
+        duplicateRestResponse.statusCode.should.equal 409 # conflict
+        #right now test fails here
+
+      it 'should return the existing video', ->
+        console.log "restResponse submitting a duplicate video: ", duplicateRestResponse 
+        console.log "restData submitting a duplicate video: ", duplicateRestData
+        duplicateRestData.should.not.equal undefined
+        duplicateRestData._id.should.equal existingVideo.id
+        duplicateRestData.user_id.should.equal user.id
+        duplicateRestData.youtube.video_id.should.equal 'Y8-CZaHFTdQ'
+        duplicateRestData.vote_count.should.equal 1
+        duplicateRestData.votes.indexOf(123).should.equal -1
 
 
 

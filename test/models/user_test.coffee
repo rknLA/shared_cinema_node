@@ -33,7 +33,6 @@ describe 'User', ->
         misc: 'a misc field to be logged'
       User.authenticate mockReq, (authenticated) ->
         authenticatedUser = authenticated
-        console.log "authenticated user: ", authenticatedUser
         done()
 
     it 'returns a user with the appropriate id', ->
@@ -42,10 +41,8 @@ describe 'User', ->
 
     it 'logs the request', (done) ->
       User.findById authenticatedUser.id, (err, theUser) ->
-        console.log "theUser! ", theUser
         mostRecentLogItem = theUser.log
         assert Array.isArray(mostRecentLogItem), 'log should be an array'
-        console.log "items: ", mostRecentLogItem
 
         assert.equal mostRecentLogItem[0].body.user_id, user.id
         done()

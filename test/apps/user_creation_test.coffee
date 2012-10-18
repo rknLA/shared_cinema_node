@@ -12,7 +12,6 @@ describe 'Users Endpoint', ->
         headers:
           'Accept': 'application/json'
       }).on 'complete', (data, response) ->
-        console.log data
         response.should.not.equal undefined
         response.statusCode.should.equal 201
         assert.notEqual data._id, null

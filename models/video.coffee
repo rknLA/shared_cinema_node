@@ -4,10 +4,23 @@ VideoSchema = new mongoose.Schema
   user_id:
     type: mongoose.Schema.Types.ObjectId
     required: true
-  youtube_video_id:
-    type: String
-    required: true
-    index: true
+  youtube:
+    video_id:
+      type: String
+      required: true
+      index: true
+    author:
+      type: String
+      required: true
+    title:
+      type: String
+      required: true
+    description:
+      type: String
+      required: true
+    thumbnail:
+      type: Array
+      required: true
   vote_count:
     type: Number
     default: 1
@@ -25,17 +38,20 @@ VideoSchema = new mongoose.Schema
     default: false
 
 VideoSchema.static 'submit', (attrs, callback) ->
-  ytID = attrs.youtube_video_id
+  unless attrs.video_metadata
+    callback()
+    return
+  ytID = attrs.video_metadata.video_id
   that = this
   this.findOne
-    youtube_video_id: ytID
+    'youtube.video_id': ytID
     played: false
     (err, vid) ->
       if vid
         callback()
       else
         video = new that()
-        video.youtube_video_id = attrs.youtube_video_id
+        video.youtube = attrs.video_metadata
         video.user_id = attrs.user_id
         video.votes = [attrs.user_id]
         video.vote_count = 1

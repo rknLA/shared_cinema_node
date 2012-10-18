@@ -7,24 +7,15 @@ routes = (app) ->
     if accepted == 'application/json'
       User.authenticate req, (currentUser) ->
         if currentUser
-          if req.body.search_id
-            # next page
-            Search.page req.body.search_id, 2, (results) ->
-              console.log results
-              res.status 500
-              res.send("UNIMPLEMENTED")
-          else
-            # new search
-            Search.createWithQuery
-              q: req.query.q
-              googleApiKey: app.settings.googleApiKey
-              user_id: currentUser._id
-              (results) ->
-                res.status 201
-                results.next = req.url
-                console.log "results with next: ", results
-                console.log "request url: ", req.url
-                res.json results
+          # new search
+          Search.createWithQuery
+            q: req.query.q
+            googleApiKey: app.settings.googleApiKey
+            user_id: currentUser._id
+            (results) ->
+              res.status 201
+              results.next = req.url
+              res.json results
         else
           res.status 401 # unauthorized
           res.send()

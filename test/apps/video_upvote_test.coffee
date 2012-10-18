@@ -14,7 +14,7 @@ describe 'Vote Endpoint', ->
             user2 = u
             Video.submit
               user_id: user1.id
-              youtube_video_id: 'AyzOUbkUf3M'
+              video_metadata: Fixtures.video.neuralNets
               (v) ->
                 user1_video = v
                 done()

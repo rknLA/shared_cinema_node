@@ -6,25 +6,25 @@ routes = (app) ->
     accepted = req.get('Accept')
     if accepted == 'application/json'
       #make object
-      youtubeId = req.body.youtube_video_id
+      youtubeId = req.body.video_metadata.video_id
       User.authenticate req, (currentUser) ->
         if currentUser
           Video.submit
             user_id: currentUser._id
-            youtube_video_id: youtubeId
+            video_metadata: req.body.video_metadata
             (v) ->
               if v
                 res.status(201)
                 res.json(v)
               else
                 Video.findOne
-                  youtube_video_id: youtubeId
+                  'youtube.video_id': youtubeId
                   (err, vid) ->
                     if err
                       res.status(422) # unprocessable entity
                       res.send(err)
                     else
-                      res.status(406) # conflict
+                      res.status(409) # conflict
                       res.json(vid)
         else
           res.status(401) # unauthorized

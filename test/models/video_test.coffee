@@ -1,6 +1,5 @@
 describe 'Video', ->
 
-  video = null
   user = null
 
   before (done) ->
@@ -8,76 +7,86 @@ describe 'Video', ->
       ip: '127.0.0.1'
       (u) ->
         user = u
-        Video.submit
-          user_id: user._id
-          youtube_video_id: 'mxPXPv3oNY4'
-          (v) ->
-            video = v
-            done()
+        done()
 
   after (done) ->
-    Video.remove (err) ->
-      throw err if err
       User.remove done
-
 
   describe 'submitting', ->
 
-    describe 'a new video', ->
+    video = null
 
-      it 'sets the user', ->
-        video.user_id.should.equal user._id
+    before (done) ->
+      Video.submit
+        user_id: user._id
+        video_metadata: Fixtures.video.maru
+        (v) ->
+          video = v
+          done()
 
-      it 'sets the video id', ->
-        video.youtube_video_id.should.equal 'mxPXPv3oNY4'
+    after (done) ->
+      Video.remove done
 
-      it 'sets a posted-at date', ->
-        video.submitted_at.should.not.equal undefined
+    it 'sets the user', ->
+      video.user_id.should.equal user._id
 
-      it 'sets started-at to null', ->
-        assert.equal video.started_at, null
+    it 'sets the video id', ->
+      video.youtube.video_id.should.equal '08pVpBq706k'
 
-      it 'sets finished-at to null', ->
-        assert.equal video.finished_at, null
+    it 'sets a posted-at date', ->
+      video.submitted_at.should.not.equal undefined
 
-      it 'sets its vote count to 1', ->
-        video.vote_count.should.equal 1
+    it 'sets started-at to null', ->
+      assert.equal video.started_at, null
 
-      it 'knows the creator voted', ->
-        video.votes.indexOf(user._id).should.not.equal -1
+    it 'sets finished-at to null', ->
+      assert.equal video.finished_at, null
 
-      it 'generates an id', ->
-        video._id.should.not.equal null
+    it 'sets its vote count to 1', ->
+      video.vote_count.should.equal 1
+
+    it 'knows the creator voted', ->
+      video.votes.indexOf(user._id).should.not.equal -1
+
+    it 'generates an id', ->
+      video._id.should.not.equal null
 
 
-    describe 'a duplicate', ->
+    describe 'and a duplicate', ->
       duplicateVideo = null
 
       before (done) ->
         Video.submit
           user_id: user._id
-          youtube_video_id: 'mxPXPv3oNY4'
+          video_metadata: Fixtures.video.maru
           (v) ->
             duplicateVideo = v
             done()
 
-
-      it 'should not get created', ->
+      it 'should return null', ->
         assert.equal duplicateVideo, null
 
   describe 'vote', ->
     newUser = null
+    video = null
 
     before (done) ->
-      User.register
-        ip: '0.0.0.0'
-        (u) ->
-          newUser= u
-          video.vote newUser._id
-          video.save done
-    after (done) ->
-      newUser.remove done
+      Video.submit
+        user_id: user._id
+        video_metadata: Fixtures.video.maru
+        (v) ->
+          video = v
+          User.register
+            ip: '0.0.0.0'
+            (u) ->
+              newUser= u
+              video.vote newUser._id
+              video.save done
 
+    after (done) ->
+      newUser.remove (err) ->
+        throw err if err
+        video.remove done
 
     it 'should increment the vote count', ->
       video.vote_count.should.equal 2

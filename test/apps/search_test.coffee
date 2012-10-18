@@ -26,7 +26,6 @@ describe "Video Search Endpoint", ->
       ).on 'complete', (data, response) ->
         searchResults = data
         searchResponse = response
-        console.log "searchResults in test: ", searchResults
         done()
 
     it 'should respond with created', ->
@@ -35,26 +34,8 @@ describe "Video Search Endpoint", ->
     it 'should have a search id', ->
       assert.notEqual searchResults._id, null
 
-    it 'should have a URL to the next search'#, ->
-    #      searchResults.next.should.equal "http://localhost:#{app.settings.port}/search?id=#{searchResults._id}&page=2"
-
-    it 'should have an array of videos', ->
+    it 'should have an array of video metadata', ->
       searchResults.videos.length.should.equal 20
-
-    describe 'getting the next page', ->
-
-      secondPageResults = null
-      secondPageResponse = null
-
-      before (done) ->
-        rest.get(searchResults.next,
-          headers:
-            'Accept': 'application/json'
-        ).on 'complete', (data, response) ->
-          secondPageResults = data
-          secondPageResponse = response
-
-          done()
 
 
 
