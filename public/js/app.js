@@ -52,7 +52,7 @@
 
 	function renderItems(id, res, callback) {
 		var list = $(id);
-
+console.log(res)
 		list.html('');
 
 		$.each(res.videos, function(index, video) {
@@ -71,7 +71,7 @@
 			//Image
 			var img = document.createElement('img');
 			img.className += ' video-list-img';
-			img.src = video.thumb;
+			img.src = video.thumbnail[0].url;
 			left.appendChild(img);
 
 			//Right
