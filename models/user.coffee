@@ -13,9 +13,12 @@ UserSchema.static 'register', (attrs, callback) ->
     else
       callback doc
 
-UserSchema.static 'authenticate', (uid, callback) ->
+UserSchema.static 'authenticate', (request, callback) ->
+  uid = request.body.user_id
+  uid = request.query.user_id unless uid
   this.findById uid, (err, user) ->
     callback user
+
 
 User = mongoose.model('User', UserSchema)
 

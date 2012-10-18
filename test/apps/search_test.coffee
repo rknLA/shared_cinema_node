@@ -35,9 +35,6 @@ describe "Video Search Endpoint", ->
     it 'should have a search id', ->
       assert.notEqual searchResults._id, null
 
-    it 'should have a URL to the next search'#, ->
-    #      searchResults.next.should.equal "http://localhost:#{app.settings.port}/search?id=#{searchResults._id}&page=2"
-
     it 'should have an array of videos', ->
       searchResults.videos.length.should.equal 20
 
