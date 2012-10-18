@@ -85,7 +85,7 @@ console.log(res)
 
 			//Description
 			var span = document.createElement('span');
-			span.innerHTML = video.desc;
+			span.innerHTML = video.description;
 			right.appendChild(span);
 
 			//Append left and right to anchor
