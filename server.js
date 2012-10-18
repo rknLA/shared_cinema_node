@@ -51,6 +51,11 @@ require('./apps/videos/upvote')(app)
 require('./apps/users/create')(app)
 require('./apps/search/video_search')(app)
 
+app.options('*', function(req, res) {
+  res.status(200);
+  res.send();
+});
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
