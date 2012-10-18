@@ -25,12 +25,17 @@
 	});
 
 	function fetchUser(callback) {
+		console.log("Fetching user...");
+
 		//Is userID in localstorage?
 		var userID = localStorage.getItem('sc-userID');
 
 		if(userID) {
+			console.log("User was in cache");
 			callback(userID); return;
 		} else {
+			console.log("New user detected..getting ID");
+
 			$.ajax({
 				url: '/users',
 				type: "POST",
@@ -38,10 +43,12 @@
 					"Accept": 'application/json'
 				},                                                          
 				error: function(res) {
-					console.log("user error")
+					console.log("There was an error fetching the ID")
 					console.log(res.responseText)
 				},
 				success: function(res) {
+					console.log("Got the user ID! " + red._id);
+
 					var userID = res._id;
 					localStorage.setItem('sc-userID', userID);
 					if(typeof callback === "function") callback(userID);
@@ -51,8 +58,10 @@
 	}
 
 	function renderItems(id, res, callback) {
+		console.log("Rendering Video Items...");
+
 		var list = $(id);
-console.log(res)
+		console.log(res)
 		list.html('');
 
 		$.each(res.videos, function(index, video) {
@@ -122,16 +131,18 @@ console.log(res)
 	}
 
 	function setupVideoSearch(userID) {
-		
+		console.log("Setting up the video search...");
+
 		var timer = null;
 		var $searchInput = $('#search .ui-input-search [data-type=search]');
 
 		$searchInput.keyup(function(e) {
 			var _this = this;
-
+			console.log("Keyup detected...");
 			//Only make video search when user stops typing for > half a second
 			clearTimeout(timer); 
 			timer = setTimeout(function() {
+				console.log("Timer cleared..fetching videos...");
 				$.ajax({
 					url: '/search',
 					data: {
@@ -143,9 +154,11 @@ console.log(res)
 						Accept: 'application/json'
 					},                                                             
 					success: function(res) {
+						console.log("Got the videos");
 						renderItems('#search-list', res);
 					},
 					error: function(msg) {
+						console.log("Failed fetching the videos...");
 						console.log(msg.responseText)
 					}
 				});
