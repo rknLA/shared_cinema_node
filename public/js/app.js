@@ -14,7 +14,7 @@
 
 	$(document).on('pageshow', '#vote', function() {
 		$.getJSON('data/videos.json', function(res) {
-			renderItems(res);
+			renderItems('#video-list', res);
 		});
 	});
 
@@ -32,7 +32,7 @@
 			callback(userID); return;
 		} else {
 			$.ajax({
-				url: url + '/users',
+				url: '/users',
 				type: "POST",
 				headers: {
 					"Accept": 'application/json'
@@ -50,8 +50,9 @@
 		}
 	}
 
-	function renderItems(res, callback) {
-		var list = $('#video-list');
+	function renderItems(id, res, callback) {
+		var list = $(id);
+console.log(res)
 		list.html('');
 
 		$.each(res.videos, function(index, video) {
@@ -70,7 +71,7 @@
 			//Image
 			var img = document.createElement('img');
 			img.className += ' video-list-img';
-			img.src = video.thumb;
+			img.src = video.thumbnail[0].url;
 			left.appendChild(img);
 
 			//Right
@@ -84,7 +85,7 @@
 
 			//Description
 			var span = document.createElement('span');
-			span.innerHTML = video.desc;
+			span.innerHTML = video.description;
 			right.appendChild(span);
 
 			//Append left and right to anchor
@@ -107,7 +108,17 @@
 
 		list.listview('refresh');
 
-		if(typeof callback === "function") callback(list);
+		list.on('click', function(e) {
+			e.preventDefault();
+
+			if(e.target.tagName == "BUTTON") {
+				var el = e.target;
+
+				console.log("I am the upvote button");
+			}
+		});
+
+		if(typeof callback === "function") callback();
 	}
 
 	function setupVideoSearch(userID) {
@@ -122,7 +133,7 @@
 			clearTimeout(timer); 
 			timer = setTimeout(function() {
 				$.ajax({
-					url: url + '/search',
+					url: '/search',
 					data: {
 						q: $(_this).val(),
 						user_id: userID
@@ -132,17 +143,7 @@
 						Accept: 'application/json'
 					},                                                             
 					success: function(res) {
-						renderItems(res, function(list) {
-							list.on('click', function(e) {
-								e.preventDefault();
-
-								if(e.target.tagName == "BUTTON") {
-									var el = e.target;
-
-									console.log("I am the upvote button");
-								}
-							});
-						});
+						renderItems('#search-list', res);
 					},
 					error: function(msg) {
 						console.log(msg.responseText)

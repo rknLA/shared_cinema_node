@@ -71,6 +71,7 @@ button.thumb:active, button.thumb:hover, button.thumb:focus {
 .video-list-right {
 	float: left;
 	margin-top: 4px;
+	width: 200px;
 }
 
 .video-items li {
