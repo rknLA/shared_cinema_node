@@ -6,7 +6,8 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , keys = require('./keys');
 
 require('coffee-script');
 
@@ -15,6 +16,7 @@ var app = module.exports = express();
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
+  app.set('googleApiKey', keys.googleApiKey);
   app.set('view engine', 'jade');
   app.use(express.favicon());
   app.use(express.logger('dev'));
@@ -39,6 +41,7 @@ app.configure('test', function() {
 require('./apps/videos/submission')(app)
 require('./apps/videos/upvote')(app)
 require('./apps/users/create')(app)
+require('./apps/search/video_search')(app)
 
 
 http.createServer(app).listen(app.get('port'), function(){
