@@ -23,13 +23,19 @@ describe 'User', ->
 
   describe 'authenticate', ->
     it 'returns a user with the appropriate id', (done) ->
-      User.authenticate user.id, (authenticated_user) ->
+      req =
+        body:
+          user_id: user.id
+      User.authenticate req, (authenticated_user) ->
         assert.notEqual authenticated_user, null
         authenticated_user.ip.should.equal '127.0.0.1'
         done()
 
     it 'returns null with an invalid id', (done) ->
-      User.authenticate 'foobarbaz', (authenticated_user) ->
+      req =
+        body:
+          user_id: 'foobarbaz'
+      User.authenticate req, (authenticated_user) ->
         assert.equal authenticated_user, null
         done()
 

@@ -13,7 +13,8 @@ UserSchema.static 'register', (attrs, callback) ->
     else
       callback doc
 
-UserSchema.static 'authenticate', (uid, callback) ->
+UserSchema.static 'authenticate', (request, callback) ->
+  uid = request.body.user_id || request.query.user_id
   this.findById uid, (err, user) ->
     callback user
 

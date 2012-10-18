@@ -7,7 +7,7 @@ routes = (app) ->
     if accepted == 'application/json'
       #make object
       youtubeId = req.body.youtube_video_id
-      User.authenticate req.body.user_id, (currentUser) ->
+      User.authenticate req, (currentUser) ->
         if currentUser
           Video.submit
             user_id: currentUser._id
