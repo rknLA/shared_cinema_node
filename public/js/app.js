@@ -13,7 +13,6 @@
 	}
 
 	$(document).on('pageshow', '#vote', function() {
-
 		$.getJSON('data/videos.json', function(res) {
 			renderItems(res);
 		});
@@ -104,7 +103,6 @@
 
 			//Append list element to list
 			list.append(li);
-			//list.append('<li><a href="#">'+video.title+'</a></li>');
 		});
 
 		list.listview('refresh');
@@ -120,6 +118,7 @@
 		$searchInput.keyup(function(e) {
 			var _this = this;
 
+			//Only make video search when user stops typing for > half a second
 			clearTimeout(timer); 
 			timer = setTimeout(function() {
 				$.ajax({
