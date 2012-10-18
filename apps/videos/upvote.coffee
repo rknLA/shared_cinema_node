@@ -6,7 +6,7 @@ routes = (app) ->
     accepted = req.get('Accept')
     if accepted == 'application/json'
       youtubeId = req.body.youtube_video_id
-      User.authenticate req.body.user_id, (currentUser) ->
+      User.authenticate req, (currentUser) ->
         if currentUser
           Video.findOne
             youtube_video_id: youtubeId

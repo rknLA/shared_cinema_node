@@ -21,15 +21,42 @@ describe 'User', ->
     it 'saves the users ip', ->
       assert.equal user.ip, '127.0.0.1'
 
-  describe 'authenticate', ->
-    it 'returns a user with the appropriate id', (done) ->
-      User.authenticate user.id, (authenticated_user) ->
-        assert.notEqual authenticated_user, null
-        authenticated_user.ip.should.equal '127.0.0.1'
+  describe 'authenticate with a valid user', ->
+
+    authenticatedUser = null
+    mockReq = null
+
+    before (done) ->
+      mockReq =
+        body:
+          user_id: user.id
+        misc: 'a misc field to be logged'
+      User.authenticate mockReq, (authenticated) ->
+        authenticatedUser = authenticated
+        console.log "authenticated user: ", authenticatedUser
         done()
 
-    it 'returns null with an invalid id', (done) ->
-      User.authenticate 'foobarbaz', (authenticated_user) ->
+    it 'returns a user with the appropriate id', ->
+      assert.notEqual authenticatedUser, null
+      authenticatedUser.ip.should.equal '127.0.0.1'
+
+    it 'logs the request', (done) ->
+      User.findById authenticatedUser.id, (err, theUser) ->
+        console.log "theUser! ", theUser
+        mostRecentLogItem = theUser.log
+        assert Array.isArray(mostRecentLogItem), 'log should be an array'
+        console.log "items: ", mostRecentLogItem
+
+        assert.equal mostRecentLogItem[0].body.user_id, user.id
+        done()
+
+
+  describe 'authenticate with invalid user', ->
+    it 'returns null', (done) ->
+      mockReq =
+        body:
+          user_id: 'foobarbaz'
+      User.authenticate mockReq, (authenticated_user) ->
         assert.equal authenticated_user, null
         done()
 

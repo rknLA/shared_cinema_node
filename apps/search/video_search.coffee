@@ -5,7 +5,7 @@ routes = (app) ->
   app.get '/search', (req, res) ->
     accepted = req.get 'Accept'
     if accepted == 'application/json'
-      User.authenticate req.query.user_id, (currentUser) ->
+      User.authenticate req, (currentUser) ->
         if currentUser
           if req.body.search_id
             # next page
