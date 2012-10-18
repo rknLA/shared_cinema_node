@@ -2,7 +2,15 @@
 	var document = window.document;
 	window.scrollTo(0, 1);
 
-	var url = 'http://m.sharedcinema.com';
+	var url;
+	var local = "local.m.sharedcinema.com";
+	if(document.domain == local) {
+		url = 'http://' + local;
+	}
+
+	else {
+		url = 'http://m.sharedcinema.com';
+	}
 
 	$(document).on('pageshow', '#vote', function() {
 
