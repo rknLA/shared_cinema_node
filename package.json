@@ -24,7 +24,7 @@
   },
   "subdomain": "rknla.shared_cinema_node",
   "domains": [
-    "p.sharedcinema.com"
+    "m.sharedcinema.com"
   ],
   "engines": {
     "node": "0.8.x"

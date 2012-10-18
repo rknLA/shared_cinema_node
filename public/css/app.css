@@ -1,0 +1,102 @@
+.header {
+
+}
+
+.header h1 {
+	font-size: 24px;
+	margin: 0;
+	padding: 6px;
+	text-transform: uppercase;
+}
+
+.header .cinema {
+	color: #eb168c;
+}
+
+.content h2 {
+	font-size: 16px;
+	margin-top: 0;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.cun {
+	text-transform: uppercase;
+}
+
+.ui-content {
+	padding: 15px 0;
+}
+
+.ui-btn-down-c {
+	background-image: -webkit-linear-gradient( white,#F1F1F1 );
+	background-image: -moz-linear-gradient( white,#F1F1F1 );
+	background-image: -ms-linear-gradient( white,#F1F1F1 );
+	background-image: -o-linear-gradient( white,#F1F1F1 );
+	background-image: linear-gradient( white,#F1F1F1 );
+}
+
+h3 {
+	margin-top: 0 !important;
+}
+
+.video-list-left {
+	float: left;
+	margin-right: 10px;
+	width: 50px;
+}
+
+button.thumb {
+	background-color: #eee;
+	background-image: url('../img/thumbs-up.png');
+	background-repeat: no-repeat;
+	background-position: 4px 4px;
+	border: 1px solid rgba(0,0,0,0.50);
+	border-radius: 4px;
+	float: left;
+	height: 16px;
+	margin-top: 8px;
+	margin-left: 20px;
+	padding: 16px;
+	width: 16px;
+}
+
+button.thumb:active, button.thumb:hover, button.thumb:focus {
+	background-color: #999;
+}
+.video-list-left img {
+	float: left;
+}
+
+.video-list-right {
+	float: left;
+	margin-top: 4px;
+}
+
+#video-list li {
+	background-color: #fff;
+	border: 0;
+	border-radius: 0;
+	margin-bottom: 5px;
+}
+
+#video-list a {
+	padding: 0;
+}
+
+#video-list span {
+	font-weight: normal;
+}
+
+#video-list span.ui-icon-arrow-r {
+	background: none;
+}
+
+#video-list h3 {
+	margin-bottom: 0;
+}
+
+.video-list-img {
+	height: 50px;
+	width: 50px;
+}

@@ -1,0 +1,34 @@
+{
+	"videos": [
+		{
+			"id"    : "0001",
+			"title" : "My first video",
+			"desc"  : "I am a video woo woo",
+			"thumb" : "../img/thumb/01.jpg"
+		},
+		{
+			"id"    : "0002",
+			"title" : "My second video",
+			"desc"  : "I am a video woo woo",
+			"thumb" : "../img/thumb/02.jpg"
+		},
+		{
+			"id"    : "0003",
+			"title" : "My third video",
+			"desc"  : "I am a video woo woo",
+			"thumb" : "../img/thumb/03.jpg"
+		},
+		{
+			"id"    : "0004",
+			"title" : "My fourth video",
+			"desc"  : "I am a video woo woo",
+			"thumb" : "../img/thumb/04.jpg"
+		},
+		{
+			"id"    : "0005",
+			"title" : "My fifth video",
+			"desc"  : "I am a video woo woo",
+			"thumb" : "../img/thumb/05.jpg"
+		}
+	]
+}
