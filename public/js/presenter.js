@@ -26,13 +26,35 @@ $videoPlayer.tubeplayer({
 	onUnMute: function(){}, // after the player is unmuted
 	onPlayerEnded: function() {
 		console.log("video finished playing")
-		initialize(userID);
+		fetchUser(function(userID) {
+			userID = userID;
+
+			initialize(userID)
+		});
 	},
 	onErrorNotFound: function() {
 		console.log("video could not be found")
+		fetchUser(function(userID) {
+			userID = userID;
+
+			initialize(userID)
+		});
 	},
 	onErrorNotEmbedable: function() {
 		console.log("video could not be embeded")
+		fetchUser(function(userID) {
+			userID = userID;
+
+			initialize(userID)
+		});
+	},
+	onErrorInvalidParameter: function() {
+		console.log("something went wrong loading the video")
+		fetchUser(function(userID) {
+			userID = userID;
+
+			initialize(userID)
+		});
 	}
 });
 
@@ -43,7 +65,7 @@ function getPlaylist(userID, callback) {
 		url: '/search',
 		type: "GET",
 		data: {
-			q: "eminem",
+			q: "katie%20perry",
 			user_id: userID
 		},
 		headers: {
@@ -85,15 +107,17 @@ function renderPlaylist(res) {
 
 		if(index == 1) {
 			console.log("I am the second video: " + video.video_id)
-			$("#video-2").src(video.thumbnail[0].url);
+			$("#video-2").attr("src", video.thumbnail[1].url);
 		}
 
 		if(index == 2) {
 			console.log("I am the third video: " + video.video_id)
+			$("#video-3").attr("src", video.thumbnail[2].url);
 		}
 
 		if(index == 3) {
 			console.log("I am the forth video: " + video.video_id)
+			$("#video-4").attr("src", video.thumbnail[3].url);
 		}
 	});
 }
