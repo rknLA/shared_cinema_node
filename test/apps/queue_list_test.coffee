@@ -57,14 +57,6 @@ describe 'The Queue', ->
           (v) ->
             video3 = v
             callback()
-    ,
-      (callback) ->
-        Video.submit
-          user_id: user1._id
-          video_metadata: Fixtures.video.badger
-          (v) ->
-            playedVideo = v
-            callback()
     ],
     (err, callback) ->
       video1.vote user2._id
@@ -77,10 +69,46 @@ describe 'The Queue', ->
           done()
 
   describe 'getting all unplayed videos', ->
+    queueResults = null
+    queueResponse = null
 
-    it 'should display submitted videos', ->
+    before (done) ->
+      rest.get("http://localhost:#{app.settings.port}/videos",
+        headers:
+          'Accept': 'application/json'
+      ).on 'complete', (data, response) ->
+        queueResults = data
+        queueResponse = response
+        done()
+
+    it 'should contain the total number of unplayed videos in the queue', ->
+      assert 'total_video_count' of queueResults
+      queueResults.total_video_count.should.equal 3
+
+    it 'should contain the number of unplayed videos in this response', ->
+      assert 'video_count' of queueResults
+      queueResults.video_count.should.equal 3
+
+    it 'should contain the queue starting index', ->
+      assert 'offset' of queueResults
+      queueResults.offset.should.equal 0
+
+    it 'should contain submitted videos in order of rank', ->
+      assert 'queue' of queueResults
+      queueResults.queue[0].video_id.should.equal Fixtures.video.dogDreams.video_id
+      queueResults.queue[1].video_id.should.equal Fixtures.video.endOfWorld.video_id
+      queueResults.queue[2].video_id.should.equal Fixtures.video.stewart.video_id
 
 
   describe 'with completed videos', ->
+
+    before (done) ->
+      Video.submit
+        user_id: user1._id
+        video_metadata: Fixtures.video.badger
+        (v) ->
+          playedVideo = v
+          done()
+
 
     it 'should only display unplayed videos'
