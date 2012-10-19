@@ -4,7 +4,7 @@
 REPORTER = 'spec'
 
 task 'test', 'run tests', ->
-  exec "NODE_ENV=test
+  exec "./test/pre_test && NODE_ENV=test
     PORT=3001
     ./node_modules/.bin/mocha
     --compilers coffee:coffee-script
