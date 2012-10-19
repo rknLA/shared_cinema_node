@@ -109,8 +109,6 @@ describe 'Videos Endpoint (submission)', ->
         #right now test fails here
 
       it 'should return the existing video', ->
-        console.log "restResponse submitting a duplicate video: ", duplicateRestResponse 
-        console.log "restData submitting a duplicate video: ", duplicateRestData
         duplicateRestData.should.not.equal undefined
         duplicateRestData._id.should.equal existingVideo.id
         duplicateRestData.user_id.should.equal user.id

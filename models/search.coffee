@@ -3,6 +3,8 @@ rest = require 'restler'
 mongoose = require 'mongoose'
 async = require 'async'
 
+Video = require './video'
+
 SearchSchema = new mongoose.Schema
   user:
     type: mongoose.Schema.Types.ObjectId
@@ -29,13 +31,19 @@ consolidateVideoMetadata = (googleMetadata) ->
 
 mergeSearchVideoWithDbVideo = (item, callback) ->
   consolidated = consolidateVideoMetadata item
-  console.log "consolidated async metadata: ", consolidated
-  callback null, consolidated
+  Video.findOne
+    'youtube.video_id': consolidated.video_id
+    (err, vid) ->
+      searchResult =
+        video_metadata: consolidated
+        submission_id: if vid then vid.id else null
+        vote_count: if vid then vid.vote_count else null
+        votes: if vid then vid.votes else []
+      callback null, searchResult
 
 
 consolidateYouTubeResults = (jsonInput, callback) ->
   output = []
-  console.log "json input to consolidateYtResults: ", jsonInput
   async.map jsonInput.feed.entry, mergeSearchVideoWithDbVideo, (err, results) ->
     throw err if err
     callback results
@@ -59,6 +67,7 @@ SearchSchema.static 'createWithQuery', (attrs, callback) ->
     consolidateYouTubeResults data, (consolidated) ->
       search.videos = consolidated
       search.save (e, doc) ->
+        console.log 'error saving search: ', e
         throw e if e
         callback doc
 

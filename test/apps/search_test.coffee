@@ -39,13 +39,17 @@ describe "Video Search Endpoint", ->
 
     describe 'Each video', ->
 
+      before ->
+        console.log searchResults.videos[0]
+
       it 'should have a submission_id', ->
-        assert 'submission_id' in searchResults.videos[0], "searched videos should have submission_id fields, even if they're null"
+        assert ('submission_id' of searchResults.videos[0]), "searched videos should have submission_id fields, even if they're null"
 
       it 'should have a vote count', ->
-        assert 'vote_count' in searchResults.videos[0], "searched videos should have a vote_count, even if it's 0"
+        assert ('vote_count' of searchResults.videos[0]), "searched videos should have a vote_count, even if it's 0"
+
       it 'should have a vote list', ->
-        assert 'votes' in searchResults.videos[0], "searched videos should have a vote array, even if it's empty"
+        assert ('votes' of searchResults.videos[0]), "searched videos should have a vote array, even if it's empty"
 
 
 
