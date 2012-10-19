@@ -51,6 +51,7 @@ function fetchUser(callback) {
 	}
 }
 
+/* I don't think we use this one anymore */
 function getPlaylist(userID, callback) {
 	console.log("getting playlist")
 
@@ -68,7 +69,6 @@ function getPlaylist(userID, callback) {
 			console.log("Got the playlist");
 			videos = res.videos;
 			if(typeof callback === "function") {
-				console.log("calllllllbackkkkkkk");
 				console.log(res)
 				callback(res);
 			}
@@ -81,11 +81,11 @@ function getPlaylist(userID, callback) {
 }
 
 	$(document).on('pageshow', '#vote', function() {
-    fetchUser(function(userID) {
-      refreshVideoQueue(userID, function(newQueue) {
-        renderItems('#video-list', newQueue);
-      });
-    });
+	    fetchUser(function(userID) {
+	      refreshVideoQueue(userID, function(newQueue) {
+	        renderItems('#video-list', newQueue);
+	      });
+	    });
 	});
 
 	$(document).on('pageshow', '#search', function() {
@@ -106,19 +106,32 @@ function getPlaylist(userID, callback) {
 			function thumbClick(videoMetaData) {
 				var _this = this;
 
-				(function(videoMetaData, userID) {
-					console.log("Up vote button clicked");
-          if (! 'description' in videoMetaData) {
-					  videoMetaData.description = ""; //Need this for back-end bug
-          }
+				(function(id, videoMetaData, userID) {
+					console.log("Thumb button clicked");
+			          if (! 'description' in videoMetaData) {
+								  videoMetaData.description = ""; //Need this for back-end bug
+			          }
 					//fetchUser(function(userID) {
-						submitVideo(videoMetaData, userID, function() {
-							console.log("Video submitted...do")
-							console.log(_this)
-							$(_this).addClass('voted');
-						})
+						if(id == '#video-list') {
+							console.log("Trying to upvote video")
+							upvoteVideo(videoMetaData, userID, function() {
+								console.log("Video upvoted")
+								console.log(_this)
+								$(_this).addClass('voted');
+							})
+						}
+
+						else {
+							console.log("Trying to submit video")
+							submitVideo(videoMetaData, userID, function() {
+								console.log("Video submitted...do")
+								console.log(_this)
+								$(_this).addClass('voted');
+							})
+						}
+						
 					//});
-				} (videoMetaData, userID))
+				} (id, videoMetaData, userID))
 			}
 
 			$.each(res.videos, function(index, video) {
@@ -137,7 +150,10 @@ function getPlaylist(userID, callback) {
 				//Image
 				var img = document.createElement('img');
 				img.className += ' video-list-img';
-				img.src = video.video_metadata.thumbnail[0].url;
+				if(video.video_metadata.thumbnail[0] && video.video_metadata.thumbnail[0].url) {
+					img.src = video.video_metadata.thumbnail[0].url;
+				}
+				
 				left.appendChild(img);
 
 				//Right
@@ -292,5 +308,29 @@ function refreshVideoQueue(userID, callback) {
     }
   });
 };
+
+function upvoteVideo(videoMetaData, userID, callback) {
+	$.ajax({
+		url: '/vote',
+		data: {
+			//video_metadata: videoMetaData,
+			user_id: userID,
+			youtube_video_id: videoMetaData.video_id
+		},
+		type: "POST",
+		headers: {
+			"Accept": 'application/json'
+		},                                                          
+		error: function(res) {
+			console.log("There was an error voting for video")
+			console.log(res.responseText)
+		},
+		success: function(res) {
+			console.log("Voted for video successfully!");
+
+			if(typeof callback === "function") callback();
+		}
+	});
+}
 
 //}(jQuery, window));
