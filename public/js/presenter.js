@@ -58,31 +58,6 @@ $videoPlayer.tubeplayer({
 	}
 });
 
-function getPlaylist(userID, callback) {
-	console.log("getting playlist")
-
-	$.ajax({
-		url: '/search',
-		type: "GET",
-		data: {
-			q: "katie%20perry",
-			user_id: userID
-		},
-		headers: {
-			Accept: 'application/json'
-		},                                                             
-		success: function(res) {
-			console.log("Got the playlist");
-			videos = res.videos;
-			if(typeof callback === "function") callback(res);
-		},
-		error: function(xhr) {
-			console.log("Failed fetching the videos...");
-			console.log(xhr.responseText)
-		}
-	});
-}
-
 function initialize(userID, reload) {
 	reload = typeof reload !== 'undefined' ? reload : false;
 
