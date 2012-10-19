@@ -15,8 +15,8 @@ var userID,
 	$videoPlayer = $("#youtube-player-container");
 
 $videoPlayer.tubeplayer({
-	width: 600, // the width of the player
-	height: 450, // the height of the player
+	width: 640, // the width of the player
+	height: 480, // the height of the player
 	preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
 	onPlay: function(id){}, // after the play method is called
 	onPause: function(){}, // after the pause method is called
@@ -126,6 +126,7 @@ function renderPlaylist(res) {
 	});
 }
 
+//This is where the presenter starts when it first loads
 setTimeout(function() {
 	fetchUser(function(userID) {
 		userID = userID;
@@ -134,6 +135,7 @@ setTimeout(function() {
 	});
 }, 1000);
 
+//Every 15 seconds, reload the playlist
 var reloadPlaylist = null;
 clearInterval(reloadPlaylist);
 reloadPlaylist = setInterval(function() {

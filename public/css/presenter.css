@@ -52,9 +52,14 @@ body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#container {
+	margin: 0 auto;
+	width: 1000px;
+}
+
 #left {
 	float: left;
-	margin-left: 20px;
+	margin: 80px 0 0 0;
 }
 
 #right {
@@ -96,3 +101,24 @@ body {
 			height: 100%;
 			width: 100%;
 		}
+
+footer {
+	clear: both;
+	text-align: center;
+	width: 100%;
+}
+
+	footer h1 {
+		color: #fff;
+		font-size: 48px;
+		text-transform: uppercase;
+	}
+
+	footer h2 {
+		color: #ccc;
+		font-size: 24px;
+	}
+
+.pink {
+	color: rgb(236,0,140);
+}
