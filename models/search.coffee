@@ -1,6 +1,9 @@
 querystring = require 'querystring'
 rest = require 'restler'
 mongoose = require 'mongoose'
+async = require 'async'
+
+Video = require './video'
 
 SearchSchema = new mongoose.Schema
   user:
@@ -18,17 +21,32 @@ SearchSchema = new mongoose.Schema
     default: 20
   
 
-consolidateYouTubeResults = (jsonInput) ->
+consolidateVideoMetadata = (googleMetadata) ->
+  consolidatedMetadata =
+    title: googleMetadata.title.$t
+    description: googleMetadata.media$group.media$description.$t
+    author: googleMetadata.media$group.media$credit[0].yt$display
+    thumbnail: googleMetadata.media$group.media$thumbnail
+    video_id: googleMetadata.media$group.yt$videoid.$t
+
+mergeSearchVideoWithDbVideo = (item, callback) ->
+  consolidated = consolidateVideoMetadata item
+  Video.findOne
+    'youtube.video_id': consolidated.video_id
+    (err, vid) ->
+      searchResult =
+        video_metadata: consolidated
+        submission_id: if vid then vid.id else null
+        vote_count: if vid then vid.vote_count else null
+        votes: if vid then vid.votes else []
+      callback null, searchResult
+
+
+consolidateYouTubeResults = (jsonInput, callback) ->
   output = []
-  for rawVideo in jsonInput.feed.entry
-    video =
-      title: rawVideo.title.$t
-      description: rawVideo.media$group.media$description.$t
-      author: rawVideo.media$group.media$credit[0].yt$display
-      thumbnail: rawVideo.media$group.media$thumbnail
-      video_id: rawVideo.media$group.yt$videoid.$t
-    output.push video
-  output
+  async.map jsonInput.feed.entry, mergeSearchVideoWithDbVideo, (err, results) ->
+    throw err if err
+    callback results
 
 SearchSchema.static 'createWithQuery', (attrs, callback) ->
   search = new this()
@@ -46,11 +64,12 @@ SearchSchema.static 'createWithQuery', (attrs, callback) ->
     headers:
       'X-GData-Key': "key=#{attrs.googleApiKey}"
   }).on 'complete', (data, response) ->
-    results = consolidateYouTubeResults data
-    search.videos = results
-    search.save (e, doc) ->
-      throw e if e
-      callback doc
+    consolidateYouTubeResults data, (consolidated) ->
+      search.videos = consolidated
+      search.save (e, doc) ->
+        console.log 'error saving search: ', e
+        throw e if e
+        callback doc
 
 
 SearchSchema.static 'page', (search_id, page_number, callback) ->
