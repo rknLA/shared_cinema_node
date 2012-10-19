@@ -1,7 +1,7 @@
 {
   "name": "sc-server",
   "description": "Shared Cinema Server",
-  "version": "0.0.2-11",
+  "version": "0.0.2-13",
   "private": true,
   "author": "Kevin Nelson <kevin@rkn.la>",
   "scripts": {

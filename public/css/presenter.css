@@ -49,6 +49,7 @@ table {
 
 body {
 	background: #000;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #left {
@@ -65,8 +66,31 @@ body {
 		display: block;
 		height: 200px;
 		margin: 10px;
+		position: relative;
+		text-align: center;
 		width: 300px;
 	}
+
+		.image-container span {
+			color: rgba(255,255,255,0.8);
+			font-size: 144px;
+			height: 100%;
+			line-height: 200px;
+			position: absolute;
+			width: 100%;
+		}
+
+		#one {
+			
+		}
+
+		#two {
+			
+		}
+
+		#three {
+			
+		}
 
 		.image-container img {
 			height: 100%;
