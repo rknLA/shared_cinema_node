@@ -135,6 +135,9 @@ function getPlaylist(userID, callback) {
 								console.log("Video upvoted")
 								console.log(_this)
 								$(_this).addClass('voted');
+								var count = $(_this).parent().find('.video-list-right').find('span');
+								var value = count.val();
+								count.html(value + 1);
 							})
 						}
 
