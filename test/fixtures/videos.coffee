@@ -163,8 +163,169 @@ videos =
       "yt$name": "end"
     ]
 
+  stewart:
+    video_id: 'i17pZMOfw0Q'
+    author: 'PolitiClips1'
+    title: "Jon Stewart on The O'Reilly Factor - Part 3"
+    description: "Comedy Central's \"The Daily Show\" host Jon Stewart interviewed by Fox New's own Bill O'Reilly"
+    thumbnail: [
+      "url": "http://i.ytimg.com/vi/i17pZMOfw0Q/default.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:03:51",
+      "yt$name": "default"
+    ,
+      "url": "http://i.ytimg.com/vi/i17pZMOfw0Q/mqdefault.jpg",
+      "height": 180,
+      "width": 320,
+      "yt$name": "mqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/i17pZMOfw0Q/hqdefault.jpg",
+      "height": 360,
+      "width": 480,
+      "yt$name": "hqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/i17pZMOfw0Q/1.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:01:55.500",
+      "yt$name": "start"
+    ,
+      "url": "http://i.ytimg.com/vi/i17pZMOfw0Q/2.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:03:51",
+      "yt$name": "middle"
+    ,
+      "url": "http://i.ytimg.com/vi/i17pZMOfw0Q/3.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:05:46.500",
+      "yt$name": "end"
+    ]
 
+  dogDreams:
+    video_id: 'grEypMDqvTE'
+    author: 'Marwan427'
+    title: 'Dog runs into Wall'
+    description: "I guess he wanted to catch that dream car."
+    thumbnail: [
+      "url": "http://i.ytimg.com/vi/grEypMDqvTE/default.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:26",
+      "yt$name": "default"
+    ,
+      "url": "http://i.ytimg.com/vi/grEypMDqvTE/mqdefault.jpg",
+      "height": 180,
+      "width": 320,
+      "yt$name": "mqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/grEypMDqvTE/hqdefault.jpg",
+      "height": 360,
+      "width": 480,
+      "yt$name": "hqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/grEypMDqvTE/1.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:13",
+      "yt$name": "start"
+    ,
+      "url": "http://i.ytimg.com/vi/grEypMDqvTE/2.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:26",
+      "yt$name": "middle"
+    ,
+      "url": "http://i.ytimg.com/vi/grEypMDqvTE/3.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:39",
+      "yt$name": "end"
+    ]
 
+  endOfWorld:
+    video_id: 'kCpjgl2baLs'
+    author: 'AlbinoBlackSheep'
+    title: 'The End of the World'
+    description: "Animation by Fluid.  End of Ze World\r\n\r\nThis was released on albinoblacksheep.com on October 30, 2003.  It depicts how the world will end based on the current state of politics.\r\n\r\nhttp://www.albinoblacksheep.com/flash/end\r\n\r\nAhhh Motherland.\r\n\r\nBut I'm le tired.\r\n\r\nFire ze missiles.\r\n\r\nCanada is like what's going on, eh?\r\n\r\nMars is laughing at us.\r\n\r\nWe're definitely going to blow ourselves up."
+    thumbnail: [
+      "url": "http://i.ytimg.com/vi/kCpjgl2baLs/default.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:47.500",
+      "yt$name": "default"
+    ,
+      "url": "http://i.ytimg.com/vi/kCpjgl2baLs/mqdefault.jpg",
+      "height": 180,
+      "width": 320,
+      "yt$name": "mqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/kCpjgl2baLs/hqdefault.jpg",
+      "height": 360,
+      "width": 480,
+      "yt$name": "hqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/kCpjgl2baLs/1.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:23.750",
+      "yt$name": "start"
+    ,
+      "url": "http://i.ytimg.com/vi/kCpjgl2baLs/2.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:47.500",
+      "yt$name": "middle"
+    ,
+      "url": "http://i.ytimg.com/vi/kCpjgl2baLs/3.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:01:11.250",
+      "yt$name": "end"
+    ]
+  
+  badger:
+    video_id: 'EIyixC9NsLI'
+    author: 'mrweebl'
+    title: 'Badgers'
+    description: "Musicator:  http://bit.ly/IRgyUM\n\nBy http://www.weebls-stuff.com\nbadger badger badger badger"
+    thumbnail: [
+      "url": "http://i.ytimg.com/vi/EIyixC9NsLI/default.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:37",
+      "yt$name": "default"
+    ,
+      "url": "http://i.ytimg.com/vi/EIyixC9NsLI/mqdefault.jpg",
+      "height": 180,
+      "width": 320,
+      "yt$name": "mqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/EIyixC9NsLI/hqdefault.jpg",
+      "height": 360,
+      "width": 480,
+      "yt$name": "hqdefault"
+    ,
+      "url": "http://i.ytimg.com/vi/EIyixC9NsLI/1.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:18.500",
+      "yt$name": "start"
+    ,
+      "url": "http://i.ytimg.com/vi/EIyixC9NsLI/2.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:37",
+      "yt$name": "middle"
+    ,
+      "url": "http://i.ytimg.com/vi/EIyixC9NsLI/3.jpg",
+      "height": 90,
+      "width": 120,
+      "time": "00:00:55.500",
+      "yt$name": "end"
+    ]
 
 
 module.exports = videos
