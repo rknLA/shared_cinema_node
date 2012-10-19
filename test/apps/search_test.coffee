@@ -39,9 +39,6 @@ describe "Video Search Endpoint", ->
 
     describe 'Each video', ->
 
-      before ->
-        console.log searchResults.videos[0]
-
       it 'should have a submission_id', ->
         assert ('submission_id' of searchResults.videos[0]), "searched videos should have submission_id fields, even if they're null"
 

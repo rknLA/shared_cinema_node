@@ -67,7 +67,6 @@ SearchSchema.static 'createWithQuery', (attrs, callback) ->
     consolidateYouTubeResults data, (consolidated) ->
       search.videos = consolidated
       search.save (e, doc) ->
-        console.log 'error saving search: ', e
         throw e if e
         callback doc
 
