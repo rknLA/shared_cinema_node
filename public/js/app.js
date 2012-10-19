@@ -198,8 +198,15 @@ function getPlaylist(userID, callback) {
 				var thumb = document.createElement('button');
 				thumb.className += ' thumb';
 
-				if(!$.inArray(userID, video.votes)) {
-					thumb.className += ' voted';
+				if(id == '#video-list') {
+					if($.inArray(userID, video.votes)) {
+						thumb.className += ' voted';
+					}
+
+				} else {
+					if(!$.inArray(userID, video.votes)) {
+						thumb.className += ' voted';
+					}
 				}
 
 				thumb.type = 'button';
