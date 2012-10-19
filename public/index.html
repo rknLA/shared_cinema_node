@@ -46,12 +46,20 @@
                 <h1>Shared <span class="cinema">Cinema</span></h1>
             </div>
             
-            <div class="content" data-role="content">
+            <div class="content" data-role="content" class="iscroll-wrapper">
                 <h2><span class="cun">Coming up next</span> (if you want it to)</h2>
+                <div class="iscroll-scroller">    
+                    <div class="iscroll-content">
+                        <div class="iscroll-pulldown">
+                            <span class="iscroll-pull-icon"></span>
+                            <span data-iscroll-pulled-text="Pull to refresh!" data-iscroll-loading-text="Refreshing..." class="iscroll-pull-label">Pull to refresh!</span>
+                        </div>
 
-                <ul id="video-list" class="video-items" data-role="listview" data-inset="true" data-filter="true">
-                    
-                </ul>
+                        <ul id="video-list" class="video-items" data-role="listview" data-inset="true" data-filter="true">
+                            
+                        </ul>
+                    </div>
+                </div>
             </div><!-- /content -->
             
             <div data-role="footer" data-position="fixed" data-tap-toggle="false">

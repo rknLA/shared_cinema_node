@@ -17,6 +17,21 @@ var lastSearchResults;
 
 console.log("Using this url: " + url);
 
+$(document).delegate("#vote", "pageinit", function(event) {
+	$(".iscroll-wrapper", this).bind( { 
+		"iscroll_onpulldown" : function(event, data) {
+			console.log("pull down detected")
+			fetchUser(function(userID) {
+		      refreshVideoQueue(userID, function(newQueue) {
+		        renderItems('#video-list', newQueue, data, function() {
+		        	alert("I was pulled and got new content")
+		        });
+		      });
+		    });
+		}
+	});
+});
+
 function fetchUser(callback) {
 	console.log("Fetching user...");
 
@@ -83,7 +98,7 @@ function getPlaylist(userID, callback) {
 	$(document).on('pageshow', '#vote', function() {
 	    fetchUser(function(userID) {
 	      refreshVideoQueue(userID, function(newQueue) {
-	        renderItems('#video-list', newQueue);
+	        renderItems('#video-list', newQueue, false);
 	      });
 	    });
 	});
@@ -94,7 +109,9 @@ function getPlaylist(userID, callback) {
 		});
 	});
 
-	function renderItems(id, res, callback) {
+	function renderItems(id, res, data, callback) {
+		data = (data || false);
+
 		console.log("Rendering Video Items...");
 
 		fetchUser(function(userID) {
@@ -209,6 +226,7 @@ function getPlaylist(userID, callback) {
 			});
 
 			list.listview('refresh');
+			if(data) data.iscrollview.refresh();
 
 			/*list.on('click', function(e) {
 				e.preventDefault();
@@ -249,7 +267,7 @@ function getPlaylist(userID, callback) {
 					},                                                             
 					success: function(res) {
 						console.log("Got the videos");
-						renderItems('#search-list', res);
+						renderItems('#search-list', res, false);
 					},
 					error: function(xhr) {
 						console.log("Failed fetching the videos...");
