@@ -47,7 +47,7 @@ app.configure('test', function() {
 });
 
 app.configure('production', function() {
-  app.set('db', mongoose.connect(keys.mongoUrl);
+  app.set('db', mongoose.connect(keys.mongoUrl));
 });
 
 require('./apps/videos/submission')(app)
