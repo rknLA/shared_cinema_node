@@ -26,7 +26,7 @@
 			//Anchor element
 			var a  = document.createElement('a');
 			a.href = '#';
-			//a.innerHTML = video.title;
+			//a.innerHTML = video.video_metadata.title;
 
 			//Left
 			var left = document.createElement('div');
@@ -35,7 +35,7 @@
 			//Image
 			var img = document.createElement('img');
 			img.className += ' video-list-img';
-			img.src = video.thumbnail[0].url;
+			img.src = video.video_metadata.thumbnail[0].url;
 			left.appendChild(img);
 
 			//Right
@@ -44,12 +44,12 @@
 
 			//Title
 			var h3 = document.createElement('h3');
-			h3.innerHTML = video.title;
+			h3.innerHTML = video.video_metadata.title;
 			right.appendChild(h3);
 
 			//Description
 			var span = document.createElement('span');
-			span.innerHTML = video.description;
+			span.innerHTML = video.video_metadata.description;
 			right.appendChild(span);
 
 			//Append left and right to anchor
