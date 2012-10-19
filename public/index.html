@@ -25,6 +25,8 @@
         <meta name = "format-detection" content = "telephone=no"/>
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width;" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="css/jquery.mobile.iscroll.css" />
+        <link rel="stylesheet" href="css/jquery.mobile.iscrollview-pull.css" />
         <link rel="stylesheet" href="css/app.css" />
         
         <title>Shared Cinema</title>
@@ -33,12 +35,14 @@
         <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
         <script src="js/custom.js"></script>
         <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <script src="js/iscroll.js"></script>
+        <script src="js/jquery.mobile.iscrollview.js"></script>
         <script src="js/app.js"></script>
     </head>
     <body>
         <div data-role="page" id="vote">
             
-            <div class="header" data-role="header">
+            <div class="header" data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Shared <span class="cinema">Cinema</span></h1>
             </div>
             
@@ -50,7 +54,7 @@
                 </ul>
             </div><!-- /content -->
             
-            <div data-role="footer">
+            <div data-role="footer" data-position="fixed" data-tap-toggle="false">
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#vote">Vote</a></li>
@@ -63,16 +67,16 @@
         
         <div data-role="page" id="search">
             
-            <div class="header" data-role="header">
+            <div class="header" data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Shared <span class="cinema">Cinema</span></h1>
             </div>
             
-            <div class data-role="content">
+            <div class data-role="content" data-iscroll>
                 <ul id="search-list" class="video-items" data-role="listview" data-inset="true" data-filter="true">
                 </ul>
             </div><!-- /content -->
             
-            <div data-role="footer">		
+            <div data-role="footer" data-position="fixed" data-tap-toggle="false">		
                 <div data-role="navbar">
                     <ul>
                         <li><a href="#vote">Vote</a></li>
