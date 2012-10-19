@@ -130,3 +130,69 @@ describe 'The Queue', ->
       queueWithPlayedResults.videos[1].video_metadata.video_id.should.equal Fixtures.video.endOfWorld.video_id
       queueWithPlayedResults.videos[2].video_metadata.video_id.should.equal Fixtures.video.stewart.video_id
 
+
+
+  describe "The Presenter's role", ->
+
+    describe 'beginning playback', ->
+      startingQueue = null
+      firstVideo = null
+
+      before (done) ->
+        rest.get("http://localhost:#{app.settings.port}/videos?user_id=#{user3._id}&limit=4",
+          headers:
+            'Accept': 'application/json'
+        ).on 'complete', (data, response) ->
+          startingQueue = data
+
+          firstVideo = startingQueue.videos[0]
+
+          rest.put("http://localhost:#{app.settings.port}/videos/#{firstVideo._id}/play?user_id=#{user3._id}",
+            headers:
+              'Accept': 'application/json'
+          ).on 'complete', (data, response) ->
+            firstVideo = data
+            done()
+
+      it "should set the video's started_at", ->
+        assert.notEqual firstVideo.started_at, null
+
+      it "should mark the video as playing", ->
+        assert firstVideo.playing
+
+      it "should not mark the video as played", ->
+        assert !firstVideo.played
+      
+      it "should not set the video's finished_at", ->
+        assert !firstVideo.finished_at
+
+      describe 'finishing playback', ->
+
+        updatedQueue = null
+
+        before (done) ->
+          rest.put("http://localhost:#{app.settings.port}/videos/#{firstVideo._id}/finish?user_id=#{user3._id}",
+            headers:
+              'Accept': 'application/json'
+          ).on 'complete', (data, response) ->
+            firstVideo = data.completedVideo
+            updatedQueue = data.updatedQueue
+            done()
+
+        it "should mark the current video as played", ->
+          assert firstVideo.played
+          
+        it "should set the video's finished_at", ->
+          assert.notEqual firstVideo.finished_at, null
+
+        it "should get the latest queue", ->
+          assert.notEqual updatedQueue, null
+          updatedQueue.length.should.equal 4
+          updatedQueue.videos[0].video_metadata.video_id.should.equal startingQueue.videos[1].video_metadata.video_id
+
+
+          
+
+
+
+
