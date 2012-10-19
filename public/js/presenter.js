@@ -127,13 +127,13 @@ function initialize(userID, reload) {
 
 	console.log("initializing")
 	getPlaylist(userID, function(res) {
-
-		if(res && res.videos && res.videos[0] && res.videos[0].video_id) {
+		console.log(res)
+		if(res && res.videos && res.videos[0] && res.videos[0].video_metadata && res.videos[0].video_metadata.video_id) {
 			console.log("fired")
-			console.log(res)
+			
 
 			if(!reload) {
-				playVideo(res.videos[0].video_id);
+				playVideo(res.videos[0].video_metadata.video_id);
 			}
 
 			renderPlaylist(res);
@@ -153,17 +153,17 @@ function renderPlaylist(res) {
 
 		if(index == 1) {
 			console.log("I am the second video: " + video.video_id)
-			$("#video-2").attr("src", video.thumbnail[1].url);
+			$("#video-2").attr("src", video.video_metadata.thumbnail[1].url);
 		}
 
 		if(index == 2) {
 			console.log("I am the third video: " + video.video_id)
-			$("#video-3").attr("src", video.thumbnail[2].url);
+			$("#video-3").attr("src", video.video_metadata.thumbnail[2].url);
 		}
 
 		if(index == 3) {
 			console.log("I am the forth video: " + video.video_id)
-			$("#video-4").attr("src", video.thumbnail[3].url);
+			$("#video-4").attr("src", video.video_metadata.thumbnail[3].url);
 		}
 	});
 }
