@@ -73,13 +73,16 @@ describe 'The Queue', ->
     queueResponse = null
 
     before (done) ->
-      rest.get("http://localhost:#{app.settings.port}/videos",
+      rest.get("http://localhost:#{app.settings.port}/videos?user_id=#{user3._id}",
         headers:
           'Accept': 'application/json'
       ).on 'complete', (data, response) ->
         queueResults = data
         queueResponse = response
         done()
+
+    it 'should respond with OK', ->
+      queueResponse.statusCode.should.equal 200
 
     it 'should contain the total number of unplayed videos in the queue', ->
       assert 'total_video_count' of queueResults
@@ -95,12 +98,14 @@ describe 'The Queue', ->
 
     it 'should contain submitted videos in order of rank', ->
       assert 'queue' of queueResults
-      queueResults.queue[0].video_id.should.equal Fixtures.video.dogDreams.video_id
-      queueResults.queue[1].video_id.should.equal Fixtures.video.endOfWorld.video_id
-      queueResults.queue[2].video_id.should.equal Fixtures.video.stewart.video_id
+      queueResults.queue[0].youtube.video_id.should.equal Fixtures.video.dogDreams.video_id
+      queueResults.queue[1].youtube.video_id.should.equal Fixtures.video.endOfWorld.video_id
+      queueResults.queue[2].youtube.video_id.should.equal Fixtures.video.stewart.video_id
 
 
   describe 'with completed videos', ->
+    queueWithPlayedResults = null
+    queueWithPlayedResponse = null
 
     before (done) ->
       Video.submit
@@ -108,7 +113,20 @@ describe 'The Queue', ->
         video_metadata: Fixtures.video.badger
         (v) ->
           playedVideo = v
-          done()
+          playedVideo.played = true
+          playedVideo.save (err, doc) ->
+            throw err if err
+            rest.get("http://localhost:#{app.settings.port}/videos?user_id=#{user3._id}",
+              headers:
+                'Accept': 'application/json'
+            ).on 'complete', (data, response) ->
+              queueWithPlayedResults = data
+              queueWithPlayedResponse = response
+              done()
 
+    it 'should only display unplayed videos', ->
+      queueWithPlayedResults.queue.length.should.equal 3
+      queueWithPlayedResults.queue[0].youtube.video_id.should.equal Fixtures.video.dogDreams.video_id
+      queueWithPlayedResults.queue[1].youtube.video_id.should.equal Fixtures.video.endOfWorld.video_id
+      queueWithPlayedResults.queue[2].youtube.video_id.should.equal Fixtures.video.stewart.video_id
 
-    it 'should only display unplayed videos'

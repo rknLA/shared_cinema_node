@@ -74,6 +74,11 @@ VideoSchema.methods.vote = (user_id) ->
     this.votes.splice vote_index, 1
     this.vote_count -= 1
 
+VideoSchema.static 'unplayedQueue', (query, callback) ->
+  this.find {played: false}, null, {sort: {vote_count: -1}}, (err, videos) ->
+    throw err if err
+    callback videos
+
 
 Video = mongoose.model('Video', VideoSchema)
 module.exports = mongoose.model('Video')
