@@ -1,11 +1,11 @@
 {
   "name": "sc-server",
   "description": "Shared Cinema Server",
-  "version": "0.0.2-9",
+  "version": "0.0.2-10",
   "private": true,
   "author": "Kevin Nelson <kevin@rkn.la>",
   "scripts": {
-    "start": "server.js",
+    "start": "node server.js",
     "test": "cake test"
   },
   "dependencies": {
