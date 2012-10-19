@@ -1,18 +1,4 @@
 //;(function($, window, undefined) {
-	var document = window.document;
-	window.scrollTo(0, 1);
-
-	var url;
-	var local = "local.m.sharedcinema.com";
-	if(document.domain == local) {
-		url = 'http://' + local;
-	}
-
-	else {
-		url = 'http://m.sharedcinema.com';
-	}
-
-	console.log("Using this url: " + url);
 
 	$(document).on('pageshow', '#vote', function() {
 		$.getJSON('data/videos.json', function(res) {
@@ -25,40 +11,6 @@
 			setupVideoSearch(userID);
 		});
 	});
-
-	function fetchUser(callback) {
-		console.log("Fetching user...");
-
-		//Is userID in localstorage?
-		var userID = localStorage.getItem('sc-userID');
-
-		if(userID) {
-			console.log("User was in cache");
-			console.log(userID)
-			callback(userID); return;
-		} else {
-			console.log("New user detected..getting ID");
-
-			$.ajax({
-				url: '/users',
-				type: "POST",
-				headers: {
-					"Accept": 'application/json'
-				},                                                          
-				error: function(res) {
-					console.log("There was an error fetching the ID")
-					console.log(res.responseText)
-				},
-				success: function(res) {
-					console.log("Got the user ID! " + red._id);
-
-					var userID = res._id;
-					localStorage.setItem('sc-userID', userID);
-					if(typeof callback === "function") callback(userID);
-				}
-			});
-		}
-	}
 
 	function renderItems(id, res, callback) {
 		console.log("Rendering Video Items...");
