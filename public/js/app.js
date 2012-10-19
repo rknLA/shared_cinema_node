@@ -169,6 +169,18 @@ function getPlaylist(userID, callback) {
 				//Append anchor to list
 				li.appendChild(a);
 
+				//Vote Count
+				var voteCount = document.createElement('span');
+				voteCount.className += " vote-count";
+				if(video.vote_count == 1) {
+					span.innerHTML = video.vote_count + " vote";
+				}
+
+				if(video.vote_count > 1) {
+					span.innerHTML = video.vote_count + " votes";
+				}
+				li.appendChild(voteCount);
+
 				//Append list element to list
 				list.append(li);
 			});
