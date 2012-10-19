@@ -135,7 +135,7 @@ function getPlaylist(userID, callback) {
 								console.log("Video upvoted")
 								console.log(_this)
 								$(_this).addClass('voted');
-								var count = $(_this).parent().find('.video-list-right').find('span');
+								var count = $(_this).parent().find('.video-list-right').find('.vote-count-value');
 								var value = count.val();
 								count.html(value + 1);
 							})
@@ -216,7 +216,7 @@ function getPlaylist(userID, callback) {
 				var voteCount = document.createElement('span');
 				voteCount.className += " vote-count";
 				if(video.vote_count == 1) {
-					span.innerHTML = video.vote_count + " vote";
+					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span> vote";
 				}
 
 				if(video.vote_count > 1) {
