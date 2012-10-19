@@ -64,6 +64,11 @@ button.thumb {
 button.thumb:active, button.thumb:hover, button.thumb:focus {
 	background-color: #999;
 }
+
+button.thumb.voted {
+	background-color: #e9168c;
+}
+
 .video-list-left img {
 	float: left;
 }
