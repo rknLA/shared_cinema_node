@@ -53,6 +53,7 @@ app.configure('production', function() {
 require('./apps/videos/submission')(app);
 require('./apps/videos/upvote')(app);
 require('./apps/videos/queue')(app);
+require('./apps/videos/presenter')(app);
 require('./apps/users/create')(app);
 require('./apps/search/video_search')(app);
 

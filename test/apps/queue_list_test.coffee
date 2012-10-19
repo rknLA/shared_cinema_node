@@ -137,6 +137,7 @@ describe 'The Queue', ->
     describe 'beginning playback', ->
       startingQueue = null
       firstVideo = null
+      playResponse = null
 
       before (done) ->
         rest.get("http://localhost:#{app.settings.port}/videos?user_id=#{user3._id}&limit=4",
@@ -151,8 +152,13 @@ describe 'The Queue', ->
             headers:
               'Accept': 'application/json'
           ).on 'complete', (data, response) ->
-            firstVideo = data
+            playResponse = response
+            if response.statusCode == 202
+              firstVideo = data
             done()
+
+      it "should respond with accepted", ->
+        playResponse.statusCode.should.equal 202
 
       it "should set the video's started_at", ->
         assert.notEqual firstVideo.started_at, null
@@ -169,15 +175,23 @@ describe 'The Queue', ->
       describe 'finishing playback', ->
 
         updatedQueue = null
+        finishResponse = null
+        nextVideo = null
 
         before (done) ->
           rest.put("http://localhost:#{app.settings.port}/videos/#{firstVideo._id}/finish?user_id=#{user3._id}",
             headers:
               'Accept': 'application/json'
           ).on 'complete', (data, response) ->
-            firstVideo = data.completedVideo
-            updatedQueue = data.updatedQueue
+            finishResponse = response
+            if response.statusCode == 202
+                firstVideo = data.finishedVideo
+                nextVideo = data.nextVideo
+                updatedQueue = data.topThree
             done()
+
+        it "should respond with accepted", ->
+          finishResponse.statusCode.should.equal 202 # accepted
 
         it "should mark the current video as played", ->
           assert firstVideo.played
@@ -187,12 +201,7 @@ describe 'The Queue', ->
 
         it "should get the latest queue", ->
           assert.notEqual updatedQueue, null
-          updatedQueue.length.should.equal 4
-          updatedQueue.videos[0].video_metadata.video_id.should.equal startingQueue.videos[1].video_metadata.video_id
-
-
-          
-
-
+          updatedQueue.length.should.equal 3 # this test fails because there aren't enough mocked videos
+          nextVideo.video_metadata.video_id.should.equal startingQueue.videos[1].video_metadata.video_id
 
 

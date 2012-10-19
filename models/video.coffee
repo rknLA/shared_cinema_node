@@ -61,6 +61,19 @@ VideoSchema.static 'submit', (attrs, callback) ->
           else
             callback doc
       
+VideoSchema.static 'unplayedQueue', (query, callback) ->
+  this.find
+    played: false
+    playing: false
+  , null,
+    sort:
+      vote_count: -1
+    limit: if 'limit' of query then query.limit else 20
+    skip: if 'offset' of query then query.offset else 0
+  , (err, videos) ->
+    throw err if err
+    callback videos
+
 VideoSchema.methods.vote = (user_id) ->
   # add a vote for users that exist, remove a vote for those that don't
   # basically, behave like a toggle
@@ -72,11 +85,28 @@ VideoSchema.methods.vote = (user_id) ->
     this.votes.splice vote_index, 1
     this.vote_count -= 1
 
-VideoSchema.static 'unplayedQueue', (query, callback) ->
-  this.find {played: false}, null, {sort: {vote_count: -1}}, (err, videos) ->
+VideoSchema.static 'play', (video_id, callback) ->
+  this.findById video_id, (err, video) ->
     throw err if err
-    callback videos
+    video.playing = true
+    video.started_at = Date.now()
+    video.save callback
 
+VideoSchema.static 'finish', (video_id, callback) ->
+  that = this
+  this.findById video_id, (err, video) ->
+    throw err if err
+    video.playing = false
+    video.played = true
+    video.finished_at = Date.now()
+    video.save (err, savedVideo) ->
+      throw err if err
+      finishOutput =
+        finishedVideo: savedVideo
+      that.unplayedQueue {limit: 4}, (queue) ->
+        finishOutput.nextVideo = queue[0]
+        finishOutput.topThree = queue[1..]
+        callback finishOutput
 
 Video = mongoose.model('Video', VideoSchema)
 module.exports = mongoose.model('Video')
