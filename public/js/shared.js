@@ -63,7 +63,11 @@ function getPlaylist(userID, callback) {
 		success: function(res) {
 			console.log("Got the playlist");
 			videos = res.videos;
-			if(typeof callback === "function") callback(res);
+			if(typeof callback === "function") {
+				console.log("calllllllbackkkkkkk");
+				console.log(res)
+				callback(res);
+			}
 		},
 		error: function(xhr) {
 			console.log("Failed fetching the videos...");
