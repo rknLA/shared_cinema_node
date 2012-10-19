@@ -4,7 +4,7 @@ VideoSchema = new mongoose.Schema
   user_id:
     type: mongoose.Schema.Types.ObjectId
     required: true
-  youtube:
+  video_metadata:
     video_id:
       type: String
       required: true
@@ -44,14 +44,14 @@ VideoSchema.static 'submit', (attrs, callback) ->
   ytID = attrs.video_metadata.video_id
   that = this
   this.findOne
-    'youtube.video_id': ytID
+    'video_metadata.video_id': ytID
     played: false
     (err, vid) ->
       if vid
         callback()
       else
         video = new that()
-        video.youtube = attrs.video_metadata
+        video.video_metadata = attrs.video_metadata
         video.user_id = attrs.user_id
         video.votes = [attrs.user_id]
         video.vote_count = 1

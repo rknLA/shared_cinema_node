@@ -13,7 +13,7 @@ routes = (app) ->
                 offset: 0
                 total_video_count: videos.length
                 video_count: videos.length
-                queue: videos
+                videos: videos
               res.status 200
               res.send output
             else

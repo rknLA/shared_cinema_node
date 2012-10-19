@@ -32,7 +32,7 @@ consolidateVideoMetadata = (googleMetadata) ->
 mergeSearchVideoWithDbVideo = (item, callback) ->
   consolidated = consolidateVideoMetadata item
   Video.findOne
-    'youtube.video_id': consolidated.video_id
+    'video_metadata.video_id': consolidated.video_id
     (err, vid) ->
       searchResult =
         video_metadata: consolidated

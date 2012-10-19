@@ -18,7 +18,7 @@ routes = (app) ->
                 res.json(v)
               else
                 Video.findOne
-                  'youtube.video_id': youtubeId
+                  'video_metadata.video_id': youtubeId
                   (err, vid) ->
                     if err
                       res.status(422) # unprocessable entity

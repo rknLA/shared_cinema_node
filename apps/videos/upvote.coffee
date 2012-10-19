@@ -10,7 +10,7 @@ routes = (app) ->
         if currentUser
           Video.find {}, (err, vids) ->
           Video.findOne
-            'youtube.video_id': youtubeId
+            'video_metadata.video_id': youtubeId
             played: false
             (err, vid) ->
               throw err if err

@@ -31,7 +31,7 @@ describe 'Video', ->
       video.user_id.should.equal user._id
 
     it 'sets the video id', ->
-      video.youtube.video_id.should.equal '08pVpBq706k'
+      video.video_metadata.video_id.should.equal '08pVpBq706k'
 
     it 'sets a posted-at date', ->
       video.submitted_at.should.not.equal undefined

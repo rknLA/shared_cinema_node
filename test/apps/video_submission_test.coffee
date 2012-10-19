@@ -40,7 +40,7 @@ describe 'Videos Endpoint (submission)', ->
       restData.user_id.should.equal user.id
 
     it 'should have the right video metadata', ->
-      restData.youtube.video_id.should.equal 'Y8-CZaHFTdQ'
+      restData.video_metadata.video_id.should.equal 'Y8-CZaHFTdQ'
 
     it 'should have the right vote count', ->
       restData.vote_count.should.equal 1
@@ -82,7 +82,7 @@ describe 'Videos Endpoint (submission)', ->
       it 'should set the right user id', ->
         restData.user_id.should.equal user.id
       it 'should have the right video metadata', ->
-        restData.youtube.video_id.should.equal 'Zg6iMDfOl9E'
+        restData.video_metadata.video_id.should.equal 'Zg6iMDfOl9E'
       it 'should have the right vote count', ->
         restData.vote_count.should.equal 1
         restData.votes.indexOf(user.id).should.not.equal -1
@@ -112,7 +112,7 @@ describe 'Videos Endpoint (submission)', ->
         duplicateRestData.should.not.equal undefined
         duplicateRestData._id.should.equal existingVideo.id
         duplicateRestData.user_id.should.equal user.id
-        duplicateRestData.youtube.video_id.should.equal 'Y8-CZaHFTdQ'
+        duplicateRestData.video_metadata.video_id.should.equal 'Y8-CZaHFTdQ'
         duplicateRestData.vote_count.should.equal 1
         duplicateRestData.votes.indexOf(123).should.equal -1
 

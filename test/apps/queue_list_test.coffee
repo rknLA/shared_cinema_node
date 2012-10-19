@@ -97,10 +97,10 @@ describe 'The Queue', ->
       queueResults.offset.should.equal 0
 
     it 'should contain submitted videos in order of rank', ->
-      assert 'queue' of queueResults
-      queueResults.queue[0].youtube.video_id.should.equal Fixtures.video.dogDreams.video_id
-      queueResults.queue[1].youtube.video_id.should.equal Fixtures.video.endOfWorld.video_id
-      queueResults.queue[2].youtube.video_id.should.equal Fixtures.video.stewart.video_id
+      assert 'videos' of queueResults
+      queueResults.videos[0].video_metadata.video_id.should.equal Fixtures.video.dogDreams.video_id
+      queueResults.videos[1].video_metadata.video_id.should.equal Fixtures.video.endOfWorld.video_id
+      queueResults.videos[2].video_metadata.video_id.should.equal Fixtures.video.stewart.video_id
 
 
   describe 'with completed videos', ->
@@ -125,8 +125,8 @@ describe 'The Queue', ->
               done()
 
     it 'should only display unplayed videos', ->
-      queueWithPlayedResults.queue.length.should.equal 3
-      queueWithPlayedResults.queue[0].youtube.video_id.should.equal Fixtures.video.dogDreams.video_id
-      queueWithPlayedResults.queue[1].youtube.video_id.should.equal Fixtures.video.endOfWorld.video_id
-      queueWithPlayedResults.queue[2].youtube.video_id.should.equal Fixtures.video.stewart.video_id
+      queueWithPlayedResults.videos.length.should.equal 3
+      queueWithPlayedResults.videos[0].video_metadata.video_id.should.equal Fixtures.video.dogDreams.video_id
+      queueWithPlayedResults.videos[1].video_metadata.video_id.should.equal Fixtures.video.endOfWorld.video_id
+      queueWithPlayedResults.videos[2].video_metadata.video_id.should.equal Fixtures.video.stewart.video_id
 
