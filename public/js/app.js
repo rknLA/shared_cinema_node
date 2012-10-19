@@ -12,6 +12,8 @@
 		url = 'http://m.sharedcinema.com';
 	}
 
+	console.log("Using this url: " + url);
+
 	$(document).on('pageshow', '#vote', function() {
 		$.getJSON('data/videos.json', function(res) {
 			renderItems('#video-list', res);
@@ -32,6 +34,7 @@
 
 		if(userID) {
 			console.log("User was in cache");
+			console.log(userID)
 			callback(userID); return;
 		} else {
 			console.log("New user detected..getting ID");
@@ -145,11 +148,11 @@
 				console.log("Timer cleared..fetching videos...");
 				$.ajax({
 					url: '/search',
+					type: "GET",
 					data: {
 						q: $(_this).val(),
 						user_id: userID
 					},
-					type: "GET",
 					headers: {
 						Accept: 'application/json'
 					},                                                             
@@ -157,11 +160,12 @@
 						console.log("Got the videos");
 						renderItems('#search-list', res);
 					},
-					error: function(msg) {
+					error: function(xhr) {
 						console.log("Failed fetching the videos...");
-						console.log(msg.responseText)
+						console.log(xhr.responseText)
 					}
 				});
+				console.log("am i getting here?")
 			}, 500);
 		});
 	}
