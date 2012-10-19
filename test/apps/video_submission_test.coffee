@@ -116,5 +116,3 @@ describe 'Videos Endpoint (submission)', ->
         duplicateRestData.vote_count.should.equal 1
         duplicateRestData.votes.indexOf(123).should.equal -1
 
-
-

@@ -13,6 +13,8 @@ else {
 	url = 'http://m.sharedcinema.com';
 }
 
+var lastSearchResults;
+
 console.log("Using this url: " + url);
 
 function fetchUser(callback) {
@@ -79,9 +81,11 @@ function getPlaylist(userID, callback) {
 }
 
 	$(document).on('pageshow', '#vote', function() {
-		$.getJSON('data/videos.json', function(res) {
-			renderItems('#video-list', res);
-		});
+    fetchUser(function(userID) {
+      refreshVideoQueue(userID, function(newQueue) {
+        renderItems('#video-list', newQueue);
+      });
+    });
 	});
 
 	$(document).on('pageshow', '#search', function() {
@@ -96,6 +100,7 @@ function getPlaylist(userID, callback) {
 		fetchUser(function(userID) {
 			var list = $(id);
 			console.log(res)
+      lastSearchResults = res;
 			list.html('');
 
 			function thumbClick(videoMetaData) {
@@ -103,7 +108,9 @@ function getPlaylist(userID, callback) {
 
 				(function(videoMetaData, userID) {
 					console.log("Up vote button clicked");
-					videoMetaData.description = ""; //Need this for back-end bug
+          if (! 'description' in videoMetaData) {
+					  videoMetaData.description = ""; //Need this for back-end bug
+          }
 					//fetchUser(function(userID) {
 						submitVideo(videoMetaData, userID, function() {
 							console.log("Video submitted...do")
@@ -261,5 +268,29 @@ function submitVideo(videoMetaData, userID, callback) {
 		}
 	});
 }
+
+function refreshVideoQueue(userID, callback) {
+  console.log("Refreshing the video queue");
+
+  $.ajax({
+    type: 'GET',
+    url: '/videos',
+    headers: {
+      'Accept': 'application/json'
+    },
+    data: {
+      user_id: userID
+    },
+    error: function(res) {
+      console.log("There was an error refreshing the video queue");
+      console.log(res.responseText);
+    },
+    success: function(res) {
+      console.log("Queue updated successfully!");
+
+      if(typeof callback === "function") callback(res);
+    }
+  });
+};
 
 //}(jQuery, window));
