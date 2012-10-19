@@ -93,74 +93,100 @@ function getPlaylist(userID, callback) {
 	function renderItems(id, res, callback) {
 		console.log("Rendering Video Items...");
 
-		var list = $(id);
-		console.log(res)
-		list.html('');
+		fetchUser(function(userID) {
+			var list = $(id);
+			console.log(res)
+			list.html('');
 
-		$.each(res.videos, function(index, video) {
-			//List element
-			var li = document.createElement('li');
+			function thumbClick(videoMetaData) {
+				var _this = this;
 
-			//Anchor element
-			var a  = document.createElement('a');
-			a.href = '#';
-			//a.innerHTML = video.video_metadata.title;
+				(function(videoMetaData, userID) {
+					console.log("Up vote button clicked");
 
-			//Left
-			var left = document.createElement('div');
-			left.className += ' video-list-left';
-
-			//Image
-			var img = document.createElement('img');
-			img.className += ' video-list-img';
-			img.src = video.video_metadata.thumbnail[0].url;
-			left.appendChild(img);
-
-			//Right
-			var right = document.createElement('div');
-			right.className += ' video-list-right';
-
-			//Title
-			var h3 = document.createElement('h3');
-			h3.innerHTML = video.video_metadata.title;
-			right.appendChild(h3);
-
-			//Description
-			var span = document.createElement('span');
-			span.innerHTML = video.video_metadata.description;
-			right.appendChild(span);
-
-			//Append left and right to anchor
-			a.appendChild(left);
-			a.appendChild(right);
-
-			//Thumb
-			var thumb = document.createElement('button');
-			thumb.className += ' thumb';
-			thumb.type = 'button';
-			thumb.innerHTML = '&nbsp;';
-			a.appendChild(thumb);
-
-			//Append anchor to list
-			li.appendChild(a);
-
-			//Append list element to list
-			list.append(li);
-		});
-
-		list.listview('refresh');
-
-		list.on('click', function(e) {
-			e.preventDefault();
-
-			if(e.target.tagName == "BUTTON") {
-				var el = e.target;
-
-				console.log("I am the upvote button");
+					//fetchUser(function(userID) {
+						submitVideo(videoMetaData, userID, function() {
+							console.log("Video submitted...do")
+							console.log(_this)
+							$(_this).addClass('voted');
+						})
+					//});
+				} (videoMetaData, userID))
 			}
-		});
 
-		if(typeof callback === "function") callback();
+			$.each(res.videos, function(index, video) {
+				//List element
+				var li = document.createElement('li');
+
+				//Anchor element
+				var a  = document.createElement('a');
+				a.href = '#';
+				//a.innerHTML = video.video_metadata.title;
+
+				//Left
+				var left = document.createElement('div');
+				left.className += ' video-list-left';
+
+				//Image
+				var img = document.createElement('img');
+				img.className += ' video-list-img';
+				img.src = video.video_metadata.thumbnail[0].url;
+				left.appendChild(img);
+
+				//Right
+				var right = document.createElement('div');
+				right.className += ' video-list-right';
+
+				//Title
+				var h3 = document.createElement('h3');
+				h3.innerHTML = video.video_metadata.title;
+				right.appendChild(h3);
+
+				//Description
+				var span = document.createElement('span');
+				span.innerHTML = video.video_metadata.description;
+				right.appendChild(span);
+
+				//Append left and right to anchor
+				a.appendChild(left);
+				a.appendChild(right);
+
+				//Thumb
+				var thumb = document.createElement('button');
+				thumb.className += ' thumb';
+
+				if(!$.inArray(userID, video.votes)) {
+					thumb.className += ' voted';
+				}
+
+				thumb.type = 'button';
+				thumb.innerHTML = '&nbsp;';
+				thumb.onclick = function(e) {
+					thumbClick.call(this, video.video_metadata);
+				};
+				a.appendChild(thumb);
+
+				//Append anchor to list
+				li.appendChild(a);
+
+				//Append list element to list
+				list.append(li);
+			});
+
+			list.listview('refresh');
+
+			/*list.on('click', function(e) {
+				e.preventDefault();
+
+				if(e.target.tagName == "BUTTON") {
+					var el = e.target;
+
+					
+				}
+			});*/
+
+			if(typeof callback === "function") callback();
+		});
 	}
 
 	function setupVideoSearch(userID) {
@@ -198,5 +224,30 @@ function getPlaylist(userID, callback) {
 			}, 500);
 		});
 	}
+
+function submitVideo(videoMetaData, userID, callback) {
+	console.log("Submitting a video")
+
+	$.ajax({
+		url: '/videos',
+		data: {
+			video_metadata: videoMetaData,
+			user_id: userID
+		},
+		type: "POST",
+		headers: {
+			"Accept": 'application/json'
+		},                                                          
+		error: function(res) {
+			console.log("There was an error submitting the video")
+			console.log(res.responseText)
+		},
+		success: function(res) {
+			console.log("Submitted the video successfully!");
+
+			if(typeof callback === "function") callback(userID);
+		}
+	});
+}
 
 //}(jQuery, window));
