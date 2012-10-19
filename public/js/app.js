@@ -1,4 +1,4 @@
-;(function($, window, undefined) {
+//;(function($, window, undefined) {
 	var document = window.document;
 	window.scrollTo(0, 1);
 
@@ -165,9 +165,8 @@
 						console.log(xhr.responseText)
 					}
 				});
-				console.log("am i getting here?")
 			}, 500);
 		});
 	}
 
-}(jQuery, window));
+//}(jQuery, window));
