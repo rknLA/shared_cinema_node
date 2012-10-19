@@ -17,6 +17,21 @@ var lastSearchResults;
 
 console.log("Using this url: " + url);
 
+$(document).delegate("#vote", "pageinit", function(event) {
+	$(".iscroll-wrapper", this).bind( { 
+		"iscroll_onpulldown" : function(event, data) {
+			console.log("pull down detected")
+			fetchUser(function(userID) {
+		      refreshVideoQueue(userID, function(newQueue) {
+		        renderItems('#video-list', newQueue, data, function() {
+		        	alert("I was pulled and got new content")
+		        });
+		      });
+		    });
+		}
+	});
+});
+
 function fetchUser(callback) {
 	console.log("Fetching user...");
 
@@ -83,7 +98,7 @@ function getPlaylist(userID, callback) {
 	$(document).on('pageshow', '#vote', function() {
 	    fetchUser(function(userID) {
 	      refreshVideoQueue(userID, function(newQueue) {
-	        renderItems('#video-list', newQueue);
+	        renderItems('#video-list', newQueue, false);
 	      });
 	    });
 	});
@@ -94,7 +109,9 @@ function getPlaylist(userID, callback) {
 		});
 	});
 
-	function renderItems(id, res, callback) {
+	function renderItems(id, res, data, callback) {
+		data = (data || false);
+
 		console.log("Rendering Video Items...");
 
 		fetchUser(function(userID) {
@@ -118,6 +135,9 @@ function getPlaylist(userID, callback) {
 								console.log("Video upvoted")
 								console.log(_this)
 								$(_this).addClass('voted');
+								var count = $(_this).parent().find('.video-list-right').find('.vote-count-value');
+								var value = count.val();
+								count.html(value + 1);
 							})
 						}
 
@@ -166,9 +186,9 @@ function getPlaylist(userID, callback) {
 				right.appendChild(h3);
 
 				//Description
-				var span = document.createElement('span');
+				/*var span = document.createElement('span');
 				span.innerHTML = video.video_metadata.description;
-				right.appendChild(span);
+				right.appendChild(span);*/
 
 				//Append left and right to anchor
 				a.appendChild(left);
@@ -178,8 +198,15 @@ function getPlaylist(userID, callback) {
 				var thumb = document.createElement('button');
 				thumb.className += ' thumb';
 
-				if(!$.inArray(userID, video.votes)) {
-					thumb.className += ' voted';
+				if(id == '#video-list') {
+					if($.inArray(userID, video.votes)) {
+						thumb.className += ' voted';
+					}
+
+				} else {
+					if(!$.inArray(userID, video.votes)) {
+						thumb.className += ' voted';
+					}
 				}
 
 				thumb.type = 'button';
@@ -196,11 +223,11 @@ function getPlaylist(userID, callback) {
 				var voteCount = document.createElement('span');
 				voteCount.className += " vote-count";
 				if(video.vote_count == 1) {
-					span.innerHTML = video.vote_count + " vote";
+					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> vote</span>";
 				}
 
 				if(video.vote_count > 1) {
-					span.innerHTML = video.vote_count + " votes";
+					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> votes</span>";
 				}
 				li.appendChild(voteCount);
 
@@ -209,6 +236,7 @@ function getPlaylist(userID, callback) {
 			});
 
 			list.listview('refresh');
+			if(data) data.iscrollview.refresh();
 
 			/*list.on('click', function(e) {
 				e.preventDefault();
@@ -249,7 +277,7 @@ function getPlaylist(userID, callback) {
 					},                                                             
 					success: function(res) {
 						console.log("Got the videos");
-						renderItems('#search-list', res);
+						renderItems('#search-list', res, false);
 					},
 					error: function(xhr) {
 						console.log("Failed fetching the videos...");
