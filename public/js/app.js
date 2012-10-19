@@ -39,7 +39,7 @@ function fetchUser(callback) {
 				console.log(res.responseText)
 			},
 			success: function(res) {
-				console.log("Got the user ID! " + red._id);
+				console.log("Got the user ID! " + res._id);
 
 				var userID = res._id;
 				localStorage.setItem('sc-userID', userID);
