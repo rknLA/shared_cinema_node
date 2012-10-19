@@ -47,33 +47,6 @@ function fetchUser(callback) {
 	}
 }
 
-function getPlaylist(userID, callback) {
-	console.log("getting playlist")
-
-	$.ajax({
-		url: '/search',
-		type: "GET",
-		data: {
-			q: "katie%20perry",
-			user_id: userID
-		},
-		headers: {
-			Accept: 'application/json'
-		},                                                             
-		success: function(res) {
-			console.log("Got the playlist");
-			videos = res.videos;
-			if(typeof callback === "function") {
-				callback(res);
-			}
-		},
-		error: function(xhr) {
-			console.log("Failed fetching the videos...");
-			console.log(xhr.responseText)
-		}
-	});
-}
-
 var userID,
 	videos,
 	$videoPlayer = $("#youtube-player-container");
@@ -126,7 +99,7 @@ function initialize(userID, reload) {
 	reload = typeof reload !== 'undefined' ? reload : false;
 
 	console.log("initializing")
-	getPlaylist(userID, function(res) {
+	refreshVideoQueue(userID, function(res) {
 		console.log(res)
 		if(res && res.videos && res.videos[0] && res.videos[0].video_metadata && res.videos[0].video_metadata.video_id) {
 			console.log("fired")
@@ -145,6 +118,30 @@ function playVideo(id) {
 	console.log("playing video: " + id)
 	$videoPlayer.tubeplayer("play", id);
 }
+
+function refreshVideoQueue(userID, callback) {
+  console.log("Refreshing the video queue");
+
+  $.ajax({
+    type: 'GET',
+    url: '/videos',
+    headers: {
+      'Accept': 'application/json'
+    },
+    data: {
+      user_id: userID
+    },
+    error: function(res) {
+      console.log("There was an error refreshing the video queue");
+      console.log(res.responseText);
+    },
+    success: function(res) {
+      console.log("Queue updated successfully!");
+
+      if(typeof callback === "function") callback(res);
+    }
+  });
+};
 
 function renderPlaylist(res) {
 	console.log("rendering playlist")
