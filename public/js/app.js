@@ -103,7 +103,7 @@ function getPlaylist(userID, callback) {
 
 				(function(videoMetaData, userID) {
 					console.log("Up vote button clicked");
-
+					videoMetaData.description = ""; //Need this for back-end bug
 					//fetchUser(function(userID) {
 						submitVideo(videoMetaData, userID, function() {
 							console.log("Video submitted...do")
