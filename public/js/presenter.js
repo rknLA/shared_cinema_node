@@ -83,12 +83,16 @@ function getPlaylist(userID, callback) {
 	});
 }
 
-function initialize(userID) {
+function initialize(userID, reload) {
+	reload = typeof reload !== 'undefined' ? reload : false;
+
 	console.log("initializing")
 	getPlaylist(userID, function(res) {
 
 		if(res && res.videos && res.videos[0] && res.videos[0].video_id) {
-			playVideo(res.videos[0].video_id);
+			if(!reload) {
+				playVideo(res.videos[0].video_id);
+			}
 
 			renderPlaylist(res);
 		}
@@ -129,3 +133,14 @@ setTimeout(function() {
 		initialize(userID)
 	});
 }, 1000);
+
+var reloadPlaylist = null;
+clearInterval(reloadPlaylist);
+reloadPlaylist = setInterval(function() {
+	console.log("reloading playlist")
+	fetchUser(function(userID) {
+		userID = userID;
+
+		initialize(userID, true)
+	});
+}, 15000);
