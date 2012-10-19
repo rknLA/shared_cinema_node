@@ -186,9 +186,9 @@ function getPlaylist(userID, callback) {
 				right.appendChild(h3);
 
 				//Description
-				var span = document.createElement('span');
+				/*var span = document.createElement('span');
 				span.innerHTML = video.video_metadata.description;
-				right.appendChild(span);
+				right.appendChild(span);*/
 
 				//Append left and right to anchor
 				a.appendChild(left);
@@ -223,11 +223,11 @@ function getPlaylist(userID, callback) {
 				var voteCount = document.createElement('span');
 				voteCount.className += " vote-count";
 				if(video.vote_count == 1) {
-					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span> vote";
+					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> vote</span>";
 				}
 
 				if(video.vote_count > 1) {
-					span.innerHTML = video.vote_count + " votes";
+					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> votes</span>";
 				}
 				li.appendChild(voteCount);
 
