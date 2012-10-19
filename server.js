@@ -46,6 +46,10 @@ app.configure('test', function() {
   app.set('db', mongoose.connect('mongodb://localhost/cinema_test'));
 });
 
+app.configure('production', function() {
+  app.set('db', mongoose.connect(keys.mongoUrl);
+});
+
 require('./apps/videos/submission')(app)
 require('./apps/videos/upvote')(app)
 require('./apps/users/create')(app)

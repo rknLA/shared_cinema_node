@@ -10,7 +10,7 @@ routes = (app) ->
           res.status 201
           res.json newUser
         else
-          res.status 500
+          res.status 422
           res.send "Server error creating a new user"
     else
       res.status 406 # not acceptable
