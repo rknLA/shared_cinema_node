@@ -172,6 +172,37 @@ describe 'The Queue', ->
       it "should not set the video's finished_at", ->
         assert !firstVideo.finished_at
 
+      describe 'finish to start', ->
+        initQueue = null
+        initFinishResponse = null
+        initVideo = null
+        formerVideo = null
+
+        before (done) ->
+          rest.put("http://localhost:#{app.settings.port}/videos/null/finish?user_id=#{user3._id}",
+            headers:
+              'Accept': 'application/json'
+          ).on 'complete', (data, response) ->
+            initFinishResponse = response
+            if response.statusCode == 202
+              formerVideo = data.finishedVideo
+              initVideo = data.nextVideo
+              initQueue = data.topThree
+            done()
+
+        it 'should not have a former video', ->
+          assert !formerVideo
+
+        it 'should give the first video as next', ->
+          assert initVideo
+          assert initVideo.video_metadata.video_id.should.equal startingQueue.videos[0].video_metadata.video_id
+
+        it 'should provide the top three', ->
+          assert initQueue
+          assert initQueue[0].video_metadata.video_id.should.equal startingQueue.videos[1].video_metadata.video_id
+
+
+
       describe 'finishing playback', ->
 
         updatedQueue = null

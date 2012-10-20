@@ -32,6 +32,18 @@ $(document).delegate("#vote", "pageinit", function(event) {
 	});
 });
 
+function ajaxErrorCallback(errorMessage) {
+  console.log(errorMessage);
+  return function(res) {
+    if(res.status == 401) {
+      localStorage.clear();
+      location.reload();
+    }
+    console.log(res.responseText)
+  }
+};
+
+
 function fetchUser(callback) {
 	console.log("Fetching user...");
 
@@ -88,10 +100,7 @@ function getPlaylist(userID, callback) {
 				callback(res);
 			}
 		},
-		error: function(xhr) {
-			console.log("Failed fetching the videos...");
-			console.log(xhr.responseText)
-		}
+		error: ajaxErrorCallback("There was an error getting the playlist")
 	});
 }
 
@@ -280,10 +289,7 @@ function getPlaylist(userID, callback) {
 						console.log("Got the videos");
 						renderItems('#search-list', res, false);
 					},
-					error: function(xhr) {
-						console.log("Failed fetching the videos...");
-						console.log(xhr.responseText)
-					}
+          error: ajaxErrorCallback("Failed fetching the videos...")
 				});
 			}, 500);
 		});
@@ -302,10 +308,7 @@ function submitVideo(videoMetaData, userID, callback) {
 		headers: {
 			"Accept": 'application/json'
 		},                                                          
-		error: function(res) {
-			console.log("There was an error submitting the video")
-			console.log(res.responseText)
-		},
+    error: ajaxErrorCallback("There was an error submitting the video"),
 		success: function(res) {
 			console.log("Submitted the video successfully!");
 
@@ -326,10 +329,7 @@ function refreshVideoQueue(userID, callback) {
     data: {
       user_id: userID
     },
-    error: function(res) {
-      console.log("There was an error refreshing the video queue");
-      console.log(res.responseText);
-    },
+    error: ajaxErrorCallback("There was an error refreshing the video queue"),
     success: function(res) {
       console.log("Queue updated successfully!");
 
@@ -350,10 +350,7 @@ function upvoteVideo(videoMetaData, userID, callback) {
 		headers: {
 			"Accept": 'application/json'
 		},                                                          
-		error: function(res) {
-			console.log("There was an error voting for video")
-			console.log(res.responseText)
-		},
+    error: ajaxErrorCallback("There was an error voting for video"),
 		success: function(res) {
 			console.log("Voted for video successfully!");
 
