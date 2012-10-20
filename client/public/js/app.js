@@ -109,6 +109,15 @@ function getPlaylist(userID, callback) {
 	      refreshVideoQueue(userID, function(newQueue) {
 	        renderItems('#video-list', newQueue, false);
 	      });
+
+	      var timer = null;
+	      clearTimeout(timer);
+
+	      timer = setTimeout(function() {
+			  refreshVideoQueue(userID, function(newQueue) {
+		        renderItems('#video-list', newQueue, false);
+		      });
+	      }, 3000);
 	    });
 	});
 
@@ -247,16 +256,6 @@ function getPlaylist(userID, callback) {
 
 			list.listview('refresh');
 			if(data) data.iscrollview.refresh();
-
-			/*list.on('click', function(e) {
-				e.preventDefault();
-
-				if(e.target.tagName == "BUTTON") {
-					var el = e.target;
-
-					
-				}
-			});*/
 
 			if(typeof callback === "function") callback();
 		});
