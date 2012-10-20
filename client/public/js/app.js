@@ -17,7 +17,7 @@ var lastSearchResults;
 
 console.log("Using this url: " + url);
 
-$(document).delegate("#vote", "pageinit", function(event) {
+/*$(document).delegate("#vote", "pageinit", function(event) {
 	$(".iscroll-wrapper", this).bind( { 
 		"iscroll_onpulldown" : function(event, data) {
 			console.log("pull down detected")
@@ -30,7 +30,7 @@ $(document).delegate("#vote", "pageinit", function(event) {
 		    });
 		}
 	});
-});
+});*/
 
 function ajaxErrorCallback(errorMessage) {
   return function(res) {
