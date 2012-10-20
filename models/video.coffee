@@ -65,6 +65,8 @@ VideoSchema.static 'unplayedQueue', (query, callback) ->
   this.find
     played: false
     playing: false
+    started_at: null
+    finished_at: null
   , null,
     sort:
       vote_count: -1

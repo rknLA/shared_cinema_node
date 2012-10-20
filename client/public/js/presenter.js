@@ -64,6 +64,7 @@ $( function() {
     width: 640, // the width of the player
     height: 480, // the height of the player
     preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
+    initialVideo: 'vg8luanN1Vo',
     onPlay: function(id){
       console.log("video " + id + " started playing");
     }, // after the play method is called
@@ -90,16 +91,21 @@ $( function() {
     }
   });
 
-  presenter.onUpdateTopThree(function(topThree) {
-    //console.log(topThree);
-    renderPlaylist(topThree);
-  });
-  presenter.onNextVideoLoaded(function(nextVideo) {
-    console.log("next video loaded called back with video");
-    console.log(nextVideo);
-    playVideo(nextVideo.video_metadata.video_id)
-  });
-  presenter.begin()
+  $.tubeplayer.defaults.afterReady = function($player) {
+    presenter.onUpdateTopThree(function(topThree) {
+      //console.log(topThree);
+      renderPlaylist(topThree);
+    });
+    presenter.onNextVideoLoaded(function(nextVideo) {
+      console.log("next video loaded called back with video");
+      console.log(nextVideo);
+      playVideo(nextVideo.video_metadata.video_id)
+    });
+    presenter.begin();
+    $videoPlayer.tubeplayer("play");
+  }
+
+
 
   function playVideo(id) {
     console.log("playing video: " + id)
