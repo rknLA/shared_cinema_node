@@ -224,7 +224,7 @@ function getPlaylist(userID, callback) {
 				thumb.className += ' thumb';
 
 				if(id == '#video-list') {
-					if($.inArray(userID, video.votes)) {
+					if(!$.inArray(userID, video.votes)) {
 						thumb.className += ' voted';
 					}
 
