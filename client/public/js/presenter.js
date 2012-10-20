@@ -99,7 +99,7 @@ $( function() {
     presenter.onNextVideoLoaded(function(nextVideo) {
       console.log("next video loaded called back with video");
       console.log(nextVideo);
-      playVideo(nextVideo.video_metadata.video_id)
+      playVideo(nextVideo.video_metadata.video_id, nextVideo)
     });
     presenter.begin();
     $videoPlayer.tubeplayer("play");
@@ -107,9 +107,10 @@ $( function() {
 
 
 
-  function playVideo(id) {
+  function playVideo(id, video) {
     console.log("playing video: " + id)
     $videoPlayer.tubeplayer("play", id);
+    $('#video-title').html(video.video_metadata.title);
   }
 
   function renderPlaylist(videos) {

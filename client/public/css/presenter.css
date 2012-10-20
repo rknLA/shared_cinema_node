@@ -62,6 +62,11 @@ body {
 	margin: 80px 0 0 0;
 }
 
+	#video-title {
+		font-size: 36px;
+		overflow: hidden;
+	}
+
 #right {
 	float: right;
 }
