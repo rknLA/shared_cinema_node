@@ -91,7 +91,7 @@ $( function() {
   });
 
   presenter.onUpdateTopThree(function(topThree) {
-    console.log(topThree);
+    //console.log(topThree);
     renderPlaylist(topThree);
   });
   presenter.onNextVideoLoaded(function(nextVideo) {
