@@ -94,19 +94,32 @@ VideoSchema.static 'play', (video_id, callback) ->
 
 VideoSchema.static 'finish', (video_id, callback) ->
   that = this
-  this.findById video_id, (err, video) ->
-    throw err if err
-    video.playing = false
-    video.played = true
-    video.finished_at = Date.now()
-    video.save (err, savedVideo) ->
+  console.log "finish called on video_id: ", video_id
+  if video_id is null or video_id is 'null'#this is the "start the presenter" hook
+    console.log "null vid, yo"
+    finishOutput =
+      finishedVideo: ''
+    that.unplayedQueue {limit: 4}, (queue) ->
+      finishOutput.nextVideo = queue[0]
+      finishOutput.topThree = queue[1..]
+      callback finishOutput
+  else
+    console.log "video_id is not null, it's #{video_id}"
+    this.findById video_id, (err, video) ->
+      console.log "error finding video to finish: ", err
       throw err if err
-      finishOutput =
-        finishedVideo: savedVideo
-      that.unplayedQueue {limit: 4}, (queue) ->
-        finishOutput.nextVideo = queue[0]
-        finishOutput.topThree = queue[1..]
-        callback finishOutput
+      video.playing = false
+      video.played = true
+      video.finished_at = Date.now()
+      video.save (err, savedVideo) ->
+        console.log 'saved finished video error: ', err
+        throw err if err
+        finishOutput =
+          finishedVideo: savedVideo
+        that.unplayedQueue {limit: 4}, (queue) ->
+          finishOutput.nextVideo = queue[0]
+          finishOutput.topThree = queue[1..]
+          callback finishOutput
 
 Video = mongoose.model('Video', VideoSchema)
 module.exports = mongoose.model('Video')

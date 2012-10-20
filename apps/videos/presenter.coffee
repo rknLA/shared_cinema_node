@@ -18,6 +18,10 @@ routes = (app) ->
       res.status 406 # not acceptable
       res.send()
 
+
+
+
+
   app.put '/videos/:video_id/finish', (req, res) ->
     accepted = req.get('Accept')
     if accepted == 'application/json'
