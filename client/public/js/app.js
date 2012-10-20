@@ -105,6 +105,7 @@ function getPlaylist(userID, callback) {
 }
 
 	$(document).on('pageshow', '#vote', function() {
+	    $('[href="#search"]').removeClass('ui-btn-active');
 	    $('[href="#vote"]').addClass('ui-btn-active'); //Need this for first time load
 
 	    fetchUser(function(userID) {
@@ -124,6 +125,9 @@ function getPlaylist(userID, callback) {
 	});
 
 	$(document).on('pageshow', '#search', function() {
+		$('[href="#vote"]').removeClass('ui-btn-active');
+		$('[href="#search"]').addClass('ui-btn-active'); //Need this for first time load
+
 		fetchUser(function(userID) {
 			setupVideoSearch(userID);
 		});
