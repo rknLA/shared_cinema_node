@@ -65,6 +65,10 @@ body {
 	#video-title {
 		font-size: 36px;
 		overflow: hidden;
+		width: 600px;
+		display: block;
+		color: #EEE;
+		margin-top: 10px;
 	}
 
 #right {
