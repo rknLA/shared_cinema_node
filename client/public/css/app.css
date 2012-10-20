@@ -116,5 +116,17 @@ button.thumb.voted {
 }
 
 .ui-btn-active {
-	color: #eb168c;
+	color: #eb168c !important;
+
+	border: 1px solid #111;
+	background: #333;
+	font-weight: bold;
+	color: white;
+	text-shadow: 0 1px 1px #111;
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #444 ),to( #2D2D2D ));
+	background-image: -webkit-linear-gradient( #444,#2D2D2D );
+	background-image: -moz-linear-gradient( #444,#2D2D2D );
+	background-image: -ms-linear-gradient( #444,#2D2D2D );
+	background-image: -o-linear-gradient( #444,#2D2D2D );
+	background-image: linear-gradient( #444,#2D2D2D );
 }

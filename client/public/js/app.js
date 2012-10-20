@@ -105,6 +105,8 @@ function getPlaylist(userID, callback) {
 }
 
 	$(document).on('pageshow', '#vote', function() {
+	    $('[href="#vote"]').addClass('ui-btn-active'); //Need this for first time load
+
 	    fetchUser(function(userID) {
 	      refreshVideoQueue(userID, function(newQueue) {
 	        renderItems('#video-list', newQueue, false);
