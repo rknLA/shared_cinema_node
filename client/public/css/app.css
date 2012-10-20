@@ -114,3 +114,7 @@ button.thumb.voted {
 	height: 50px;
 	width: 50px;
 }
+
+.ui-btn-active {
+	color: #eb168c;
+}
