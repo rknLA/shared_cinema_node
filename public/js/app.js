@@ -186,9 +186,10 @@ function getPlaylist(userID, callback) {
 				right.appendChild(h3);
 
 				//Description
-				/*var span = document.createElement('span');
-				span.innerHTML = video.video_metadata.description;
-				right.appendChild(span);*/
+				var span = document.createElement('span');
+				//span.innerHTML = video.video_metadata.description;
+				span.innerHTML = "";
+				right.appendChild(span);
 
 				//Append left and right to anchor
 				a.appendChild(left);
