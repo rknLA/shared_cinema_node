@@ -98,8 +98,37 @@ $videoPlayer.tubeplayer({
 function initialize(userID, reload) {
 	reload = typeof reload !== 'undefined' ? reload : false;
 
-	console.log("initializing")
+	//First time page load
+	if(reload == "first") {
+		console.log("initializing for the first time")
+
+		$.ajax({
+		    type: 'GET',
+		    url: '/videos',
+		    headers: {
+		      'Accept': 'application/json'
+		    },
+		    data: {
+		      user_id: userID,
+		      limit: 4
+		    },
+		    error: function(res) {
+		      console.log("There was an error getting the videos");
+		      console.log(res.responseText);
+		    },
+		    success: function(data, response) {
+		      console.log("Initialized successfully for the first time!");
+
+		      	var startingQueue = data;
+
+          		var firstVideo = startingQueue.videos[0];
+		    }
+		  });
+	}
+
+
 	refreshVideoQueue(userID, function(res) {
+		console.log("initializing")
 		console.log(res)
 		if(res && res.videos && res.videos[0] && res.videos[0].video_metadata && res.videos[0].video_metadata.video_id) {
 			console.log("fired")
@@ -112,6 +141,63 @@ function initialize(userID, reload) {
 			renderPlaylist(res);
 		}
 	});
+}
+
+function finishVideo(userID, videoID) {
+	if() {
+		console.log("Finished first video")
+
+		$.ajax({
+		    type: 'PUT',
+		    url: '/videos/null/finish',
+		    headers: {
+		      'Accept': 'application/json'
+		    },
+		    data: {
+		      user_id: userID
+		    },
+		    error: function(res) {
+		      console.log("There was an error finishing the first video");
+		      console.log(res.responseText);
+		    },
+		    success: function(data, response) {
+		      console.log("Got the data back!");
+		      var formerVideo = data.finishedVideo;
+              var initVideo   = data.nextVideo;
+              var initQueue   = data.topThree;
+
+		      //if(typeof callback === "function") callback(res);
+		    }
+		});
+	}
+
+	//
+	else {
+		console.log("Finished video")
+
+		$.ajax({
+		    type: 'PUT',
+		    url: '/videos/'+videoID+'/finish',
+		    headers: {
+		      'Accept': 'application/json'
+		    },
+		    data: {
+		      user_id: userID
+		    },
+		    error: function(res) {
+		      console.log("There was an error finishing the first video");
+		      console.log(res.responseText);
+		    },
+		    success: function(data, response) {
+		      console.log("Got the data back!");
+		      var formerVideo = data.finishedVideo;
+              var initVideo   = data.nextVideo;
+              var initQueue   = data.topThree;
+
+		      //if(typeof callback === "function") callback(res);
+		    }
+		});
+	}
 }
 
 function playVideo(id) {
@@ -170,7 +256,7 @@ setTimeout(function() {
 	fetchUser(function(userID) {
 		userID = userID;
 
-		initialize(userID)
+		initialize(userID, "first")
 	});
 }, 1000);
 
