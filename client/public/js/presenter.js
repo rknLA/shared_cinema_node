@@ -61,7 +61,7 @@ $( function() {
 
 
   $videoPlayer.tubeplayer({
-    width: 640, // the width of the player
+    width: 720, // the width of the player
     height: 480, // the height of the player
     preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
     initialVideo: 'vg8luanN1Vo',
