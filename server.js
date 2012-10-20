@@ -33,8 +33,8 @@ app.configure(function(){
   app.use(express.session());
   app.use(allowCORS);
   app.use(app.router);
-  app.use(require('less-middleware')({ src: __dirname + '/public' }));
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(require('less-middleware')({ src: __dirname + '/client/public' }));
+  app.use(express.static(path.join(__dirname, 'client/public')));
 });
 
 app.configure('development', function(){
