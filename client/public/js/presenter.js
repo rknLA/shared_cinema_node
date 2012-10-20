@@ -91,7 +91,6 @@ $( function() {
   });
 
   presenter.onUpdateTopThree(function(topThree) {
-    console.log("top 3 called back with array");
     console.log(topThree);
     renderPlaylist(topThree);
   });
@@ -108,22 +107,22 @@ $( function() {
   }
 
   function renderPlaylist(videos) {
-    console.log("rendering playlist")
-    console.log(videos)
+    //console.log("rendering playlist")
+    //console.log(videos)
     $.each(videos, function(index, video) {
 
       if(index == 0) {
-        console.log("I am the second video: " + video.video_metadata.video_id)
+        //console.log("I am the second video: " + video.video_metadata.video_id)
         $("#video-2").attr("src", video.video_metadata.thumbnail[1].url);
       }
 
       if(index == 1) {
-        console.log("I am the third video: " + video.video_metadata.video_id)
+        //console.log("I am the third video: " + video.video_metadata.video_id)
         $("#video-3").attr("src", video.video_metadata.thumbnail[2].url);
       }
 
       if(index == 2) {
-        console.log("I am the forth video: " + video.video_metadata.video_id)
+        //console.log("I am the forth video: " + video.video_metadata.video_id)
         $("#video-4").attr("src", video.video_metadata.thumbnail[3].url);
       }
     });
