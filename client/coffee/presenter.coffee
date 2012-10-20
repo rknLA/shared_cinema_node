@@ -30,22 +30,29 @@ window.SharedCinema.PresenterModel = class PresenterAPI
   queueNextVideo: (video) ->
     @currentVideo = video
     @notifyNextVideoListener(@currentVideo) if typeof @notifyNextVideoListener is 'function'
-    @blockAsyncTopThreeUpdates = false
+    $.ajax
+      type: 'PUT'
+      url: "/videos/#{video._id}/play?user_id=#{@userId}"
+      headers:
+        'Accept': 'application/json'
+      error: @handleAjaxError
+      success: (data, response) ->
+        @blockAsyncTopThreeUpdates = false
 
 
   setTopThree: (topThree) ->
     @topThree = topThree
-    console.log "notify top three listener:", @notifyTopThreeListener
+    #console.log "notify top three listener:", @notifyTopThreeListener
     @notifyTopThreeListener(@topThree) if typeof @notifyTopThreeListener is 'function'
     @setPollTopThree(1000)
 
   handleAjaxError: (response, description) ->
-    console.log description
-    console.log response.responseText
+    #console.log description
+    #console.log response.responseText
 
   setPollTopThree: (time) ->
     @topThreeTimeout = setTimeout( =>
-      console.log "pol the top three!"
+      #console.log "pol the top three!"
       $.ajax
         type: 'GET'
         url: "/videos?user_id=#{@userId}&limit=3"

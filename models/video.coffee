@@ -86,6 +86,7 @@ VideoSchema.methods.vote = (user_id) ->
     this.vote_count -= 1
 
 VideoSchema.static 'play', (video_id, callback) ->
+  console.log "play called on video_id: ", video_id
   this.findById video_id, (err, video) ->
     throw err if err
     video.playing = true

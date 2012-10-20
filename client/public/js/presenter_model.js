@@ -45,27 +45,32 @@
       if (typeof this.notifyNextVideoListener === 'function') {
         this.notifyNextVideoListener(this.currentVideo);
       }
-      return this.blockAsyncTopThreeUpdates = false;
+      return $.ajax({
+        type: 'PUT',
+        url: "/videos/" + video._id + "/play?user_id=" + this.userId,
+        headers: {
+          'Accept': 'application/json'
+        },
+        error: this.handleAjaxError,
+        success: function(data, response) {
+          return this.blockAsyncTopThreeUpdates = false;
+        }
+      });
     };
 
     PresenterAPI.prototype.setTopThree = function(topThree) {
       this.topThree = topThree;
-      console.log("notify top three listener:", this.notifyTopThreeListener);
       if (typeof this.notifyTopThreeListener === 'function') {
         this.notifyTopThreeListener(this.topThree);
       }
       return this.setPollTopThree(1000);
     };
 
-    PresenterAPI.prototype.handleAjaxError = function(response, description) {
-      console.log(description);
-      return console.log(response.responseText);
-    };
+    PresenterAPI.prototype.handleAjaxError = function(response, description) {};
 
     PresenterAPI.prototype.setPollTopThree = function(time) {
       var _this = this;
       return this.topThreeTimeout = setTimeout(function() {
-        console.log("pol the top three!");
         return $.ajax({
           type: 'GET',
           url: "/videos?user_id=" + _this.userId + "&limit=3",
