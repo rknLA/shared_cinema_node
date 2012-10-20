@@ -33,8 +33,8 @@ $(document).delegate("#vote", "pageinit", function(event) {
 });
 
 function ajaxErrorCallback(errorMessage) {
-  console.log(errorMessage);
   return function(res) {
+    console.log(errorMessage);
     if(res.status == 401) {
       localStorage.clear();
       location.reload();
