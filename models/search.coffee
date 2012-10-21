@@ -33,6 +33,7 @@ mergeSearchVideoWithDbVideo = (item, callback) ->
   consolidated = consolidateVideoMetadata item
   Video.findOne
     'video_metadata.video_id': consolidated.video_id
+    played: false
     (err, vid) ->
       searchResult =
         video_metadata: consolidated
