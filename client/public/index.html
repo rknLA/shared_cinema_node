@@ -32,11 +32,16 @@
 
         <!--<script src="cordova-2.0.0.js"></script>-->
         <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-        <script src="js/custom.js"></script>
-        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-        <script src="js/iscroll.js"></script>
-        <script src="js/jquery.mobile.iscrollview.js"></script>
-        <script src="js/app.js"></script>
+        <!-- Since jQuery Mobile relies on jQuery core's $.ajax() functionality,
+         $.support.cors & $.mobile.allowCrossDomainPages must be set to true to tell
+         $.ajax to load cross-domain pages. -->
+        <script type="text/javascript">
+            $(document).bind("mobileinit", function() {
+                $.mobile.listview.prototype.options.filterPlaceholder = "Search...";
+                $.support.cors = true;
+                $.mobile.allowCrossDomainPages = true;
+            });
+        </script>
     </head>
     <body>
         <div data-role="page" id="vote">
@@ -89,5 +94,9 @@
             </div><!-- /footer -->
             
         </div><!-- /search -->
+        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <script src="js/iscroll.js"></script>
+        <script src="js/jquery.mobile.iscrollview.js"></script>
+        <script src="js/app.js"></script>
     </body>
 </html>
