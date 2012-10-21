@@ -59,8 +59,17 @@ body {
 
 #left {
 	float: left;
-	margin: 80px 0 0 0;
+	margin: 10px 0 0 0;
 }
+
+	#video-title {
+		font-size: 36px;
+		overflow: hidden;
+		width: 720px;
+		display: block;
+		color: #EEE;
+		margin-top: 10px;
+	}
 
 #right {
 	float: right;
@@ -69,18 +78,18 @@ body {
 	.image-container {
 		background: #333;
 		display: block;
-		height: 200px;
+		height: 160px;
 		margin: 10px;
 		position: relative;
 		text-align: center;
-		width: 300px;
+		width: 240px;
 	}
 
 		.image-container span {
 			color: rgba(255,255,255,0.8);
 			font-size: 144px;
 			height: 100%;
-			line-height: 200px;
+			line-height: 160px;
 			position: absolute;
 			width: 100%;
 		}
@@ -104,6 +113,8 @@ body {
 
 footer {
 	clear: both;
+	float: left;
+	margin: 10px 0 0;
 	text-align: center;
 	width: 100%;
 }

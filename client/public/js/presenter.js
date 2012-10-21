@@ -61,7 +61,7 @@ $( function() {
 
 
   $videoPlayer.tubeplayer({
-    width: 640, // the width of the player
+    width: 720, // the width of the player
     height: 480, // the height of the player
     preferredQuality: "default",// preferred quality: default, small, medium, large, hd720
     initialVideo: 'vg8luanN1Vo',
@@ -99,7 +99,7 @@ $( function() {
     presenter.onNextVideoLoaded(function(nextVideo) {
       console.log("next video loaded called back with video");
       console.log(nextVideo);
-      playVideo(nextVideo.video_metadata.video_id)
+      playVideo(nextVideo.video_metadata.video_id, nextVideo)
     });
     presenter.begin();
     $videoPlayer.tubeplayer("play");
@@ -107,9 +107,10 @@ $( function() {
 
 
 
-  function playVideo(id) {
+  function playVideo(id, video) {
     console.log("playing video: " + id)
     $videoPlayer.tubeplayer("play", id);
+    $('#video-title').html(video.video_metadata.title);
   }
 
   function renderPlaylist(videos) {
