@@ -1,7 +1,7 @@
 {
   "name": "sc-server",
   "description": "Shared Cinema Server",
-  "version": "0.0.2-55",
+  "version": "0.0.2-56",
   "private": true,
   "author": "Shared Cinema <info@sharedcinema.com>",
   "contributors": [

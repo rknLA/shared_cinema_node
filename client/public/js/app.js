@@ -18,7 +18,8 @@ var lastSearchResults;
 console.log("Using this url: " + url);
 
 $.ajaxSetup({
-	cache : false
+	cache : false,
+	timeout: 10000
 });
 
 /*$(document).delegate("#vote", "pageinit", function(event) {
