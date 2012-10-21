@@ -36,9 +36,9 @@ $.ajaxSetup({
 	});
 });*/
 
-$(document).ready(function() {
+$(document).bind('pageinit', function() {
     
-    document.addEventListener("deviceready", function() {
+    //document.addEventListener("deviceready", function() {
 
     	$(document).on('pageshow', '#vote', function() {
 		    $('[href="#search"]').removeClass('ui-btn-active');
@@ -69,7 +69,7 @@ $(document).ready(function() {
 			});
 		});
 
-    }, true); 
+    //}, true); 
 
 });
 
