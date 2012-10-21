@@ -17,6 +17,10 @@ var lastSearchResults;
 
 console.log("Using this url: " + url);
 
+$.ajaxSetup({
+	cache : false
+});
+
 /*$(document).delegate("#vote", "pageinit", function(event) {
 	$(".iscroll-wrapper", this).bind( { 
 		"iscroll_onpulldown" : function(event, data) {
@@ -31,6 +35,43 @@ console.log("Using this url: " + url);
 		}
 	});
 });*/
+
+$(document).ready(function() {
+    
+    document.addEventListener("deviceready", function() {
+
+    	$(document).on('pageshow', '#vote', function() {
+		    $('[href="#search"]').removeClass('ui-btn-active');
+		    $('[href="#vote"]').addClass('ui-btn-active'); //Need this for first time load
+
+		    fetchUser(function(userID) {
+		      refreshVideoQueue(userID, function(newQueue) {
+		        renderItems('#video-list', newQueue, false);
+		      });
+
+		      var timer = null;
+		      clearTimeout(timer);
+
+		      timer = setTimeout(function() {
+				  refreshVideoQueue(userID, function(newQueue) {
+			        renderItems('#video-list', newQueue, false);
+			      });
+		      }, 3000);
+		    });
+		});
+
+		$(document).on('pageshow', '#search', function() {
+			$('[href="#vote"]').removeClass('ui-btn-active');
+			$('[href="#search"]').addClass('ui-btn-active'); //Need this for first time load
+
+			fetchUser(function(userID) {
+				setupVideoSearch(userID);
+			});
+		});
+
+    }, true); 
+
+});
 
 function ajaxErrorCallback(errorMessage) {
   return function(res) {
@@ -104,201 +145,172 @@ function getPlaylist(userID, callback) {
 	});
 }
 
-	$(document).on('pageshow', '#vote', function() {
-	    $('[href="#search"]').removeClass('ui-btn-active');
-	    $('[href="#vote"]').addClass('ui-btn-active'); //Need this for first time load
+function renderItems(id, res, data, callback) {
+	data = (data || false);
 
-	    fetchUser(function(userID) {
-	      refreshVideoQueue(userID, function(newQueue) {
-	        renderItems('#video-list', newQueue, false);
-	      });
+	console.log("Rendering Video Items...");
 
-	      var timer = null;
-	      clearTimeout(timer);
+	fetchUser(function(userID) {
+		var list = $(id);
+		console.log(res)
+  lastSearchResults = res;
+		list.html('');
 
-	      timer = setTimeout(function() {
-			  refreshVideoQueue(userID, function(newQueue) {
-		        renderItems('#video-list', newQueue, false);
-		      });
-	      }, 3000);
-	    });
-	});
+		function thumbClick(videoMetaData) {
+			var _this = this;
 
-	$(document).on('pageshow', '#search', function() {
-		$('[href="#vote"]').removeClass('ui-btn-active');
-		$('[href="#search"]').addClass('ui-btn-active'); //Need this for first time load
+			(function(id, videoMetaData, userID) {
+				console.log("Thumb button clicked");
+		          if (! 'description' in videoMetaData) {
+							  videoMetaData.description = ""; //Need this for back-end bug
+		          }
+				//fetchUser(function(userID) {
+					if(id == '#video-list') {
+						console.log("Trying to upvote video")
+						upvoteVideo(videoMetaData, userID, function() {
+							console.log("Video upvoted")
+							console.log(_this)
+							$(_this).addClass('voted');
+							var count = $(_this).parent().find('.video-list-right').find('.vote-count-value');
+							var value = count.val();
+							count.html(value + 1);
+						})
+					}
 
-		fetchUser(function(userID) {
-			setupVideoSearch(userID);
-		});
-	});
+					else {
+						console.log("Trying to submit video")
+						submitVideo(videoMetaData, userID, function() {
+							console.log("Video submitted...do")
+							console.log(_this)
+							$(_this).addClass('voted');
+						})
+					}
+					
+				//});
+			} (id, videoMetaData, userID))
+		}
 
-	function renderItems(id, res, data, callback) {
-		data = (data || false);
+		$.each(res.videos, function(index, video) {
+			//List element
+			var li = document.createElement('li');
 
-		console.log("Rendering Video Items...");
+			//Anchor element
+			var a  = document.createElement('a');
+			a.href = '#';
+			//a.innerHTML = video.video_metadata.title;
 
-		fetchUser(function(userID) {
-			var list = $(id);
-			console.log(res)
-      lastSearchResults = res;
-			list.html('');
+			//Left
+			var left = document.createElement('div');
+			left.className += ' video-list-left';
 
-			function thumbClick(videoMetaData) {
-				var _this = this;
+			//Image
+			var img = document.createElement('img');
+			img.className += ' video-list-img';
+			if(video.video_metadata.thumbnail[0] && video.video_metadata.thumbnail[0].url) {
+				img.src = video.video_metadata.thumbnail[0].url;
+			}
+			
+			left.appendChild(img);
 
-				(function(id, videoMetaData, userID) {
-					console.log("Thumb button clicked");
-			          if (! 'description' in videoMetaData) {
-								  videoMetaData.description = ""; //Need this for back-end bug
-			          }
-					//fetchUser(function(userID) {
-						if(id == '#video-list') {
-							console.log("Trying to upvote video")
-							upvoteVideo(videoMetaData, userID, function() {
-								console.log("Video upvoted")
-								console.log(_this)
-								$(_this).addClass('voted');
-								var count = $(_this).parent().find('.video-list-right').find('.vote-count-value');
-								var value = count.val();
-								count.html(value + 1);
-							})
-						}
+			//Right
+			var right = document.createElement('div');
+			right.className += ' video-list-right';
 
-						else {
-							console.log("Trying to submit video")
-							submitVideo(videoMetaData, userID, function() {
-								console.log("Video submitted...do")
-								console.log(_this)
-								$(_this).addClass('voted');
-							})
-						}
-						
-					//});
-				} (id, videoMetaData, userID))
+			//Title
+			var h3 = document.createElement('h3');
+			h3.innerHTML = video.video_metadata.title;
+			right.appendChild(h3);
+
+			//Description
+			var span = document.createElement('span');
+			//span.innerHTML = video.video_metadata.description;
+			span.innerHTML = "";
+			right.appendChild(span);
+
+			//Append left and right to anchor
+			a.appendChild(left);
+			a.appendChild(right);
+
+			//Thumb
+			var thumb = document.createElement('button');
+			thumb.className += ' thumb';
+
+			if(id == '#video-list') {
+				if(!$.inArray(userID, video.votes)) {
+					thumb.className += ' voted';
+				}
+
+			} else {
+				if(!$.inArray(userID, video.votes)) {
+					thumb.className += ' voted';
+				}
 			}
 
-			$.each(res.videos, function(index, video) {
-				//List element
-				var li = document.createElement('li');
+			thumb.type = 'button';
+			thumb.innerHTML = '&nbsp;';
+			thumb.onclick = function(e) {
+				thumbClick.call(this, video.video_metadata);
+			};
+			a.appendChild(thumb);
 
-				//Anchor element
-				var a  = document.createElement('a');
-				a.href = '#';
-				//a.innerHTML = video.video_metadata.title;
+			//Append anchor to list
+			li.appendChild(a);
 
-				//Left
-				var left = document.createElement('div');
-				left.className += ' video-list-left';
+			//Vote Count
+			var voteCount = document.createElement('span');
+			voteCount.className += " vote-count";
+			if(video.vote_count == 1) {
+				span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> vote</span>";
+			}
 
-				//Image
-				var img = document.createElement('img');
-				img.className += ' video-list-img';
-				if(video.video_metadata.thumbnail[0] && video.video_metadata.thumbnail[0].url) {
-					img.src = video.video_metadata.thumbnail[0].url;
-				}
-				
-				left.appendChild(img);
+			if(video.vote_count > 1) {
+				span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> votes</span>";
+			}
+			li.appendChild(voteCount);
 
-				//Right
-				var right = document.createElement('div');
-				right.className += ' video-list-right';
+			//Append list element to list
+			list.append(li);
+		});
 
-				//Title
-				var h3 = document.createElement('h3');
-				h3.innerHTML = video.video_metadata.title;
-				right.appendChild(h3);
+		list.listview('refresh');
+		if(data) data.iscrollview.refresh();
 
-				//Description
-				var span = document.createElement('span');
-				//span.innerHTML = video.video_metadata.description;
-				span.innerHTML = "";
-				right.appendChild(span);
+		if(typeof callback === "function") callback();
+	});
+}
 
-				//Append left and right to anchor
-				a.appendChild(left);
-				a.appendChild(right);
+function setupVideoSearch(userID) {
+	console.log("Setting up the video search...");
 
-				//Thumb
-				var thumb = document.createElement('button');
-				thumb.className += ' thumb';
+	var timer = null;
+	var $searchInput = $('#search .ui-input-search [data-type=search]');
 
-				if(id == '#video-list') {
-					if(!$.inArray(userID, video.votes)) {
-						thumb.className += ' voted';
-					}
-
-				} else {
-					if(!$.inArray(userID, video.votes)) {
-						thumb.className += ' voted';
-					}
-				}
-
-				thumb.type = 'button';
-				thumb.innerHTML = '&nbsp;';
-				thumb.onclick = function(e) {
-					thumbClick.call(this, video.video_metadata);
-				};
-				a.appendChild(thumb);
-
-				//Append anchor to list
-				li.appendChild(a);
-
-				//Vote Count
-				var voteCount = document.createElement('span');
-				voteCount.className += " vote-count";
-				if(video.vote_count == 1) {
-					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> vote</span>";
-				}
-
-				if(video.vote_count > 1) {
-					span.innerHTML = "<span class='vote-count-value'>" + video.vote_count + "</span><span> votes</span>";
-				}
-				li.appendChild(voteCount);
-
-				//Append list element to list
-				list.append(li);
+	$searchInput.keyup(function(e) {
+		var _this = this;
+		console.log("Keyup detected...");
+		//Only make video search when user stops typing for > half a second
+		clearTimeout(timer); 
+		timer = setTimeout(function() {
+			console.log("Timer cleared..fetching videos...");
+			$.ajax({
+				url: '/search',
+				type: "GET",
+				data: {
+					q: $(_this).val(),
+					user_id: userID
+				},
+				headers: {
+					Accept: 'application/json'
+				},                                                             
+				success: function(res) {
+					console.log("Got the videos");
+					renderItems('#search-list', res, false);
+				},
+      error: ajaxErrorCallback("Failed fetching the videos...")
 			});
-
-			list.listview('refresh');
-			if(data) data.iscrollview.refresh();
-
-			if(typeof callback === "function") callback();
-		});
-	}
-
-	function setupVideoSearch(userID) {
-		console.log("Setting up the video search...");
-
-		var timer = null;
-		var $searchInput = $('#search .ui-input-search [data-type=search]');
-
-		$searchInput.keyup(function(e) {
-			var _this = this;
-			console.log("Keyup detected...");
-			//Only make video search when user stops typing for > half a second
-			clearTimeout(timer); 
-			timer = setTimeout(function() {
-				console.log("Timer cleared..fetching videos...");
-				$.ajax({
-					url: '/search',
-					type: "GET",
-					data: {
-						q: $(_this).val(),
-						user_id: userID
-					},
-					headers: {
-						Accept: 'application/json'
-					},                                                             
-					success: function(res) {
-						console.log("Got the videos");
-						renderItems('#search-list', res, false);
-					},
-          error: ajaxErrorCallback("Failed fetching the videos...")
-				});
-			}, 500);
-		});
-	}
+		}, 500);
+	});
+}
 
 function submitVideo(videoMetaData, userID, callback) {
 	console.log("Submitting a video")
